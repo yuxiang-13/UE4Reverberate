@@ -13,5 +13,8 @@ UCLASS()
 class REFLECTDEMO_API AFWGameMode : public AGameModeBase
 {
 	GENERATED_BODY()
-	
+public:
+	AFWGameMode();
+
+	virtual void BeginPlay() override;
 };

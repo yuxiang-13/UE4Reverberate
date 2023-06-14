@@ -13,5 +13,6 @@ UCLASS()
 class REFLECTDEMO_API AFWPlayerController : public APlayerController
 {
 	GENERATED_BODY()
-	
+public:
+	virtual void BeginPlay() override;
 };

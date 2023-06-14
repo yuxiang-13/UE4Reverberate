@@ -4,6 +4,8 @@
 #include "FWInter/FWCallActor.h"
 
 #include "Common/FWCommon.h"
+#include "FWInter/FWInterActor.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values
 AFWCallActor::AFWCallActor()
@@ -22,7 +24,16 @@ void AFWCallActor::FWCallFun()
 void AFWCallActor::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
+	// 获取另一个Interface的Actor
+	TArray<AActor*> ActArray;
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AFWInterActor::StaticClass(), ActArray);
+	if (ActArray.Num() > 0)
+	{
+		AFWInterActor* FWInterActor = Cast<AFWInterActor>(ActArray[0]);
+		// UE 推荐 调用接口时，直接使用 Execute_ 的
+		// FWInterActor->Execute_FWFunThree(FWInterActor, FString(" -- - >>>>  Execute_FWFunThree "));
+	}
 }
 
 // Called every frame

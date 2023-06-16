@@ -78,7 +78,6 @@ void AFWReceActor::BeginPlay()
 		// 调用不定参数的泛型函数
 		// A->RegFunFive_HasB_Params<void>(MyFunction_1, FString("MyFunction_1"));
 
-
 		TFunction<bool(FString, int32)> MyFunction_2 = [this](FString InfoStr, int32 Count)
 		{
 			return EchoInfoThree(InfoStr, Count);

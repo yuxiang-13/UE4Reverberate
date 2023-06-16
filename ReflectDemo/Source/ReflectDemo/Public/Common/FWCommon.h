@@ -10,7 +10,7 @@
 // 用于打印的 命名空间
 namespace FWHelper
 {
-	FORCEINLINE void Debug(FString Message, float Duration)
+	FORCEINLINE void Debug(FString Message, float Duration = 500.f)
 	{
 		if (GEngine) GEngine->AddOnScreenDebugMessage(-1, Duration, FColor::Yellow, Message);
 	}

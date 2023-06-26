@@ -37,6 +37,9 @@ public:
 	void RegFuncOne(TFunction<void(FString)> TargetTFunOne);
 
 
+
+
+	
 	// TMemFuncPtrType 传递函数
 	//  
 	/*  1 TMemFunPtrType<false, UserClass, void(int,FString)> 含义
@@ -50,6 +53,9 @@ public:
 	template<class UserClass>
 	void RegFuncTwo(UserClass* TarObj, typename TMemFunPtrType<false, UserClass, void(int,FString)>::Type InMethod);
 
+
+
+	
 	
 	// 方法3： FMethodPtr 的函数传递  method 方法 英 /ˈmeθəd/
 	/*
@@ -64,6 +70,9 @@ public:
 	template <class UserClass>
 	void RegFunThree(UserClass* TarObj, typename FWDE_Single_Two::TUObjectMethodDelegate<UserClass>::FMethodPtr InMethod);
 
+
+
+	
 	// 泛型定义统一接口 FMethodPtr
 	// class DelegateType 之后传的是一个泛型(就是模板Template)
 	// class userClass 传类指针
@@ -81,6 +90,8 @@ public:
 	template<class DelegateType, class UserClass, typename... Vartypes>
 	void RegFunFour(UserClass* TarObj, typename DelegateType::template TUObjectMethodDelegate<UserClass>::FMethodPtr InMethod, Vartypes... Vars);
 
+
+
 	
 	// 泛型定义统一接口  
 	// RetType =>  返回值
@@ -90,7 +101,7 @@ public:
 	{
 		TarFuncTion(Vars...);
 	}
-	
+
 	template<typename RetType, typename... VarTypes>
 	void RegFunFive_ASelf_Params(TFunction<RetType(VarTypes ...)> TarFuncTion)
 	{
@@ -118,7 +129,7 @@ private:
 	 */
 	// 这样就定义好了一个函数指针的  变量
 	TFunction<void(FString)> TFunOne;
-	
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -149,6 +160,7 @@ void AFWDEActor::RegFuncTwo(UserClass* TarObj,
 	ExeDel.ExecuteIfBound(36, FString("- - ->>  I ---"));
 }
 
+
 template <class UserClass>
 void AFWDEActor::RegFunThree(UserClass* TarObj,
 	typename FWDE_Single_Two::TUObjectMethodDelegate<UserClass>::FMethodPtr InMethod)
@@ -168,6 +180,7 @@ void AFWDEActor::RegFunThree(UserClass* TarObj,
 	ExeDel.ExecuteIfBound();
 }
 
+
 template <class DelegateType, class UserClass, typename ... Vartypes>
 void AFWDEActor::RegFunFour(UserClass* TarObj,
  // typename DelegateType::TUObjectMethodDelegate<UserClass>::FMethodPtr InMethod, Vartypes... Vars)
@@ -180,3 +193,4 @@ void AFWDEActor::RegFunFour(UserClass* TarObj,
 	// 触发
 	ExeDel.ExecuteIfBound();
 }
+

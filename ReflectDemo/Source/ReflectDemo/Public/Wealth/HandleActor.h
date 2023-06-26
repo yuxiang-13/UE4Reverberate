@@ -4,28 +4,18 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "FWReceActor.generated.h"
+#include "HandleActor.generated.h"
 
 UCLASS()
-class REFLECTDEMO_API AFWReceActor : public AActor
+class REFLECTDEMO_API AHandleActor : public AActor
 {
 	GENERATED_BODY()
 	
 public:	
 	// Sets default values for this actor's properties
-	AFWReceActor();
-
-	// 声明一个 public 函数
-	void EchoInfoOne(FString InfoStr);
-
-	// b 中 声明一个函数,一会让 A 绑定这个函数指针
-	void EchoInfoTwo(int32 Count, FString InfoStr);
-
-	bool EchoInfoThree(FString InfoStr, int32 Count);
+	AHandleActor();
 
 protected:
-
-	
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 

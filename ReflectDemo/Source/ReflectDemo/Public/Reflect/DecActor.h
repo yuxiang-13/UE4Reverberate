@@ -20,11 +20,11 @@ public:
 	void ControlUFunc();
 
 	// 调用UFunction方法二： TBaseDelegate
-	void RunUFuncTwo();
+	void RunUFuncTwo(); 
 	
 	// 调用UFunction方法三： UFunction函数指针
 	void RunUFuncThree();
-protected:
+protected: 
 	virtual void BeginPlay() override;
 
 public:	

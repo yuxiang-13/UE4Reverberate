@@ -9,7 +9,7 @@
 /**
  * 
  */
-UCLASS()
+UCLASS(Blueprintable, BlueprintType)
 class REFLECTDEMO_API UHandleObject : public UObject
 {
 	GENERATED_BODY()

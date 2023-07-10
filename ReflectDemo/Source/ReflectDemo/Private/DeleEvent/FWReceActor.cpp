@@ -46,8 +46,6 @@ void AFWReceActor::BeginPlay()
 		// 	}
 		// );
 
-
-
 		
 		// 方法2： TMemFunPtrType 的函数传递
 		// 1 this 类
@@ -61,13 +59,49 @@ void AFWReceActor::BeginPlay()
 		// A->RegFunThree(this, &AFWReceActor::EchoInfoTwo);
 
 
+		/*
+		//利用模板实现交换
+		template<typename T>
+		void mySwap(T& a, T& b)
+		{
+			// ...
+		}
+		  //1、自动类型推导
+		  mySwap(a, b);
+		  
+		  //2、显示指定类型
+		  mySwap<int>(a, b);
+
+
+		template <typename T0, typename T1, typename T2, typename T3, typename T4>
+		T2 func(T1 v1, T3 v2, T4 v3)
+		{
+			T0 static t0 = T0(0);
+		
+			T2 t2 = v1 + v2 + v3;
+		
+			return t2;
+		};
+		
+		int main()
+		{
+			std::cout << func<double, int, int>(0, 1, 1.2) << std::endl;
+		}
+
+		1 其中T0和函数实参无关，所以必须指定，而T2和返回值相关，所以也必须指定，
+		2 又因为模板的形参和实参是通过位置来进行关联的，所以T1夹在T0和T1之间，其也需要显式指定。
+		3 3和T4则可以从实参列表中推导出来
+
+
+
+		 */
 		
 		// 方法4： FMethodPtr 扩展
-		// // 定义委托
-		// DECLARE_DELEGATE_TwoParams(FTempDele, int32, FString)
-		// // RegFunFour<FTempDele> 的 <> ：为啥这个需要<>，因为涉及到了 模板根据形参自动类型推导。
+		// 定义委托
+		DECLARE_DELEGATE_TwoParams(FTempDele, int32, FString)
+		// RegFunFour<FTempDele> 的 <> ：为啥这个需要<>，因为涉及到了 模板根据形参自动类型推导。而且只用了类型，没传具体值
+		// &AFWReceActor::EchoInfoTwo 这个对应 函数体第二个参数，也就是 这个FTemp  Delegate的类型绑定的 具体 方法 InMethod
 		// A->RegFunFour<FTempDele>(this, &AFWReceActor::EchoInfoTwo, 100, FString("RegFunFour"));
-
 
 		
 		

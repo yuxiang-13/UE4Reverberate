@@ -24,6 +24,7 @@ void AFWDEActor::RegFuncOne(TFunction<void(FString)> TargetTFunOne)
 	TFunOne(FString("RegFuncOne"));
 }
 
+
 // Called when the game starts or when spawned
 void AFWDEActor::BeginPlay()
 {

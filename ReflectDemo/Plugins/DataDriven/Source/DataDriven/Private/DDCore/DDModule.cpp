@@ -5,6 +5,7 @@
 
 #include "DDCore/DDModel.h"
 #include "DDCore/DDWealth.h"
+#include "DDObject/DDOO.h"
 
 // Sets default values for this component's properties
 UDDModule::UDDModule()
@@ -65,5 +66,13 @@ void UDDModule::ChangeModuleType(FName ModuleType)
 	{
 		DDH::Debug(10) << "生成模具错误----" << GetName() << DDH::Endl();
 	}
+}
+
+void UDDModule::RegisterObject(IDDOO* ObjectInst)
+{
+	// 注册对象到数据模块
+	Model->RegisterObject(ObjectInst);
+	// 把此 模组自己  注册到对象数组
+	ObjectInst->AssignModule(this);
 }
 

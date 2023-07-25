@@ -7,9 +7,9 @@
 #include "UObject/NoExportTypes.h"
 #include "DDModel.generated.h"
 
-/**
- * 
- */
+
+class IDDOO;
+
 UCLASS()
 class DATADRIVEN_API UDDModel : public UObject, public IDDMM
 {
@@ -19,4 +19,7 @@ public:
 	virtual void ModelInit();
 	virtual void ModelBeginPlay();
 	virtual void ModelTick(float DeltaSeconds);
+
+	// 注册对象 到  数据模块
+	void RegisterObject(IDDOO* ObjectInst);
 };

@@ -3,6 +3,8 @@
 
 #include "DDCore/DDCenterModule.h"
 
+#include "DDObject/DDOO.h"
+
 
 void UDDCenterModule::IterChangeModuleType(UDDModule* Module, FName ModType)
 {
@@ -98,4 +100,15 @@ void UDDCenterModule::IterGatherModule(UDDModule * Module, TArray<UDDModule*> & 
 	{
 		IterGatherModule(Module->ChildrenModule[i], GatherGroup);
 	}
+}
+
+bool UDDCenterModule::RegisterToModule(IDDOO* ObjctInst)
+{
+	// 判断模组ID是否有效且进行过注册
+	if (ObjctInst->GetModuleIndex() < ModuleGroup.Num() && ModuleGroup[ObjctInst->GetModuleIndex()])
+	{
+		ModuleGroup[ObjctInst->GetModuleIndex()]->RegisterObject(ObjctInst);
+		return true;
+	}
+	return false;
 }

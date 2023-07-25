@@ -19,7 +19,7 @@ namespace DDH
 	//*********
 	// DDRecord & --->>  TMD，引用实际可不是指针！！！可以把引用认为是一个变量的别名，就和#define ...，typedef ...很像。  所以只是别名，不是指针，不能return *指针
 	//*********
-	FORCEINLINE DDRecord& Debug(float InTime = 3000.f, FColor InColor = FColor::Yellow)
+	FORCEINLINE DDRecord& Debug(float InTime = 10.f, FColor InColor = FColor::Yellow)
 	{
 		DDRecord::Get()->PatternID = 0;
 		DDRecord::Get()->InitParam(InTime, InColor);

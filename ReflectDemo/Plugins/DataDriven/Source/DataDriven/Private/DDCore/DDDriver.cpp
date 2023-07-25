@@ -53,6 +53,12 @@ void ADDDriver::Tick(float DeltaTime)
 	}
 }
 
+bool ADDDriver::RegisterToModule(IDDOO* ObjectInst)
+{
+	// 调用中央模组进行注册
+	return Center->RegisterToModule(ObjectInst);
+}
+
 #if WITH_EDITOR
 void ADDDriver::PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent)
 {

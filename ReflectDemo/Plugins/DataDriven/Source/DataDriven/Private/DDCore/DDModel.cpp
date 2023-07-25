@@ -15,3 +15,8 @@ void UDDModel::ModelTick(float DeltaSeconds)
 {
 	
 }
+
+void UDDModel::RegisterObject(IDDOO* ObjectInst)
+{
+	
+}

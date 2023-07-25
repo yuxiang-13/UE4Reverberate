@@ -11,6 +11,7 @@
 
 class UDDModel;// 2 模块
 class UDDWealth;// 3 模块
+class IDDOO;
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class DATADRIVEN_API UDDModule : public USceneComponent
@@ -29,6 +30,10 @@ public:
 
 	// 设定模组对应的枚举类型
 	void ChangeModuleType(FName ModuleType);
+
+	
+	// 注册对象 到  数据模块
+	void RegisterObject(IDDOO* ObjectInst);
 public:
 	// 这个模组下的 子 模组
 	UPROPERTY()
@@ -46,4 +51,6 @@ protected:
 	UDDMessage * Message;
 	// 资源模块 指针
 	UDDWealth * Wealth;
+
+	
 };

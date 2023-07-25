@@ -11,6 +11,7 @@
 
 #include "DDDriver.generated.h"
 
+class IDDOO;
 
 UCLASS()
 class DATADRIVEN_API ADDDriver : public AActor
@@ -24,6 +25,8 @@ public:
 
 	virtual void Tick(float DeltaTime) override;
 
+	// 将资源进行注册
+	bool RegisterToModule(IDDOO* ObjectInst);
 	
 	// 驱动器驱动，UPROPERTY的变量发生变化时自动触发函数,函数内让中心模组触发 本模组以及子模组的类型设置
 	#if WITH_EDITOR

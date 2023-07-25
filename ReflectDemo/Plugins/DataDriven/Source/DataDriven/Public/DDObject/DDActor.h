@@ -3,11 +3,12 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "DDOO.h"
 #include "GameFramework/Actor.h"
 #include "DDActor.generated.h"
 
 UCLASS()
-class DATADRIVEN_API ADDActor : public AActor
+class DATADRIVEN_API ADDActor : public AActor, public IDDOO
 {
 	GENERATED_BODY()
 	

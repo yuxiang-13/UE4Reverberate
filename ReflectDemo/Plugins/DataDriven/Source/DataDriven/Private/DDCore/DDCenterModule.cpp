@@ -76,18 +76,18 @@ void UDDCenterModule::TotalGatherModule(FName ModType)
 	// 迭代添加到数组
 	IterGatherModule(this, GatherGroup);
 
-	// // 获取枚举元素的数量
-	// int32 ModuleName = FindObject<UEnum>((UObject*)ANY_PACKAGE, *(ModType.ToString()), true)->GetMaxEnumValue();
-	// // 填充空对象到ModuleGroup
-	// for (int i = 0; i < ModuleName; ++i)
-	// {
-	// 	ModuleGroup.Push(NULL);
-	// }
-	// // 按照模组ID填充模组 到 ModuleGroup
-	// for (int i = 0; i < ModuleGroup.Num(); ++i)
-	// {
-	// 	ModuleGroup[GatherGroup[i]->ModuleIndex] = GatherGroup[i];
-	// }
+	// 获取枚举元素的数量
+	int32 ModuleName = FindObject<UEnum>((UObject*)ANY_PACKAGE, *(ModType.ToString()), true)->GetMaxEnumValue();
+	// 填充空对象到ModuleGroup
+	for (int i = 0; i < ModuleName; ++i)
+	{
+		ModuleGroup.Push(NULL);
+	}
+	// 按照模组ID填充模组 到 ModuleGroup
+	for (int i = 0; i < ModuleGroup.Num(); ++i)
+	{
+		ModuleGroup[GatherGroup[i]->ModuleIndex] = GatherGroup[i];
+	}
 }
 
 void UDDCenterModule::IterGatherModule(UDDModule * Module, TArray<UDDModule*> & GatherGroup)

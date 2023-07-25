@@ -16,7 +16,8 @@ public class ReflectDemo : ModuleRules
 			 "InputCore",
 			 "HeadMountedDisplay",
 			 "EnhancedInput",
-			 "UMG"
+			 "UMG",
+			 "DataDriven"
 		});
 	}
 }

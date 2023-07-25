@@ -64,6 +64,7 @@ void AReflectDemoCharacter::BeginPlay()
 			Subsystem->AddMappingContext(DefaultMappingContext, 0);
 		}
 	}
+
 }
 
 //////////////////////////////////////////////////////////////////////////

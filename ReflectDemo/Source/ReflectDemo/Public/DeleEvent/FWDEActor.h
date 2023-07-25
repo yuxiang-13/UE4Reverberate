@@ -36,6 +36,7 @@ public:
 	// 2步： 函数形参直接 就是函数指针
 	void RegFuncOne(TFunction<void(FString)> TargetTFunOne);
 
+
 	// TMemFuncPtrType 传递函数
 	//  
 	/*  1 TMemFunPtrType<false, UserClass, void(int,FString)> 含义
@@ -49,6 +50,7 @@ public:
 	template<class UserClass>
 	void RegFuncTwo(UserClass* TarObj, typename TMemFunPtrType<false, UserClass, void(int,FString)>::Type InMethod);
 
+
 	// 方法3： FMethodPtr 的函数传递  method 方法 英 /ˈmeθəd/
 	/*
 	 * FWDE_Single_Two::TUObjectMethodDelegate<UserClass>::FMethodPtr
@@ -61,6 +63,7 @@ public:
 	 */
 	template <class UserClass>
 	void RegFunThree(UserClass* TarObj, typename FWDE_Single_Two::TUObjectMethodDelegate<UserClass>::FMethodPtr InMethod);
+
 
 	
 	// 泛型定义统一接口 FMethodPtr
@@ -80,7 +83,7 @@ public:
 	template<class DelegateType, class UserClass, typename... Vartypes>
 	void RegFunFour(UserClass* TarObj, typename DelegateType::template TUObjectMethodDelegate<UserClass>::FMethodPtr InMethod, Vartypes... Vars);
 
-
+	
 	
 	// 泛型定义统一接口  
 	// RetType =>  返回值
@@ -90,7 +93,7 @@ public:
 	{
 		TarFuncTion(Vars...);
 	}
-	
+
 	
 	template<typename RetType, typename... VarTypes>
 	void RegFunFive_ASelf_Params(TFunction<RetType(VarTypes ...)> TarFuncTion)

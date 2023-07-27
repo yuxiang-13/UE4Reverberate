@@ -3,6 +3,9 @@
 
 #include "DDCore/DDDriver.h"
 
+#include "DDObject/DDOO.h"
+#include "Kismet/GameplayStatics.h"
+
 // Sets default values
 ADDDriver::ADDDriver()
 {
@@ -33,8 +36,33 @@ void ADDDriver::PostInitializeComponents()
 void ADDDriver::BeginPlay()
 {
 	Super::BeginPlay();
+	
+	RegisterGamePlay();
+	
 	// 迭代调用Init函数
 	Center->IterModuleInit(Center);
+
+}
+
+void ADDDriver::RegisterGamePlay()
+{
+	// 获取GameInstance
+	UGameInstance* GameInstance = UGameplayStatics::GetGameInstance(GetWorld());
+	// 如果GameInstance存在，并且继承自IIDDOO，那就手动注册进Center
+	if (GameInstance && Cast<IDDOO>(GameInstance))
+	{
+		Cast<IDDOO>(GameInstance)->RegisterToModule("Center", "GameInstance", "GameInstance");
+	}
+
+	// 获取Controller并注册到全局公共类DDCommon
+	APlayerController* PlayerController = UGameplayStatics::GetPlayerController(GetWorld(), 0);
+	if (!PlayerController)
+	{
+		DDH::Debug(10) << "No PlayerController  " << DDH::Endl();
+	} else
+	{
+		UDDCommon::Get()->InitController(PlayerController);
+	}
 }
 
 void ADDDriver::Tick(float DeltaTime)

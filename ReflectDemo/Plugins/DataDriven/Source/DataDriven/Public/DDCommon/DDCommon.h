@@ -131,8 +131,19 @@ public:
 	void InitDriver(ADDDriver* InDriver);
 	// 获取驱动器
 	ADDDriver* GetDriver();
+
+	void InitController(APlayerController* InController);
+
+	APlayerController* GetController();
+
+	// 暂停游戏
+	void SetPauseGame(bool IsPause);
+	const bool IsPauseGame() const;
+	
 private:
 	static UDDCommon* DDInst;
 	
 	ADDDriver* Driver;
+
+	APlayerController* PlayerController;
 };

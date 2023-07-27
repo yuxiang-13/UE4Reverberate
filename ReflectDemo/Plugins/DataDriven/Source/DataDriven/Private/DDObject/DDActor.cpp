@@ -6,22 +6,21 @@
 // Sets default values
 ADDActor::ADDActor()
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
 
 }
 
-// Called when the game starts or when spawned
+void ADDActor::DDRelease()
+{
+	IDDOO::DDRelease();
+	//能调用这个方法那么一定是注册到了框架,获取的世界一定不为空
+	GetDDWorld()->DestroyActor(this);
+}
+
 void ADDActor::BeginPlay()
 {
 	Super::BeginPlay();
-	
-}
 
-// Called every frame
-void ADDActor::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-
+	// 自动注册到框架
+	RegisterToModule(ModuleName, ObjectName, ClassName);
 }
 

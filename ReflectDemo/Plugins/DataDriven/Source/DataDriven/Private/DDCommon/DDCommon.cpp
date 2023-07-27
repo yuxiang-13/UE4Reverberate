@@ -25,3 +25,23 @@ ADDDriver* UDDCommon::GetDriver()
 {
 	return Driver;
 }
+
+void UDDCommon::InitController(APlayerController* InController)
+{
+	PlayerController = InController;
+}
+
+APlayerController* UDDCommon::GetController()
+{
+	return PlayerController;
+}
+
+void UDDCommon::SetPauseGame(bool IsPause)
+{
+	PlayerController->SetPause(IsPause);
+}
+
+const bool UDDCommon::IsPauseGame() const
+{
+	return PlayerController->IsPaused();
+}

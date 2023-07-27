@@ -30,10 +30,12 @@ public:
 
 	// 设定模组对应的枚举类型
 	void ChangeModuleType(FName ModuleType);
-
 	
 	// 注册对象 到  数据模块
 	void RegisterObject(IDDOO* ObjectInst);
+
+	// 模组所属对象的 销毁自身
+	void ChildDestroy(FName ObjectName);
 public:
 	// 这个模组下的 子 模组
 	UPROPERTY()

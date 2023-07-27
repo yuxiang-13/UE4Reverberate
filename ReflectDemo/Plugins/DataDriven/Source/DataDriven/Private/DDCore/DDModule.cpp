@@ -76,3 +76,8 @@ void UDDModule::RegisterObject(IDDOO* ObjectInst)
 	ObjectInst->AssignModule(this);
 }
 
+void UDDModule::ChildDestroy(FName ObjectName)
+{
+	Model->DestroyObject(ObjectName);
+}
+

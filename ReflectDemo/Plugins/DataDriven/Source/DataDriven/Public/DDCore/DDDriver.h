@@ -51,6 +51,10 @@ public:
 protected:
 	virtual void BeginPlay() override;
 
+	// 注册Gameplay框架到DataDriven
+	void RegisterGamePlay();
+	
+protected:
 	// 判断是不是Tick第一帧
 	bool IsBeginePlay;
 	

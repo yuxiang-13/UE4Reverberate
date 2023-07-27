@@ -41,6 +41,8 @@ public class DataDriven : ModuleRules
 				// ... add private dependencies that you statically link with here ...	
 				
 				"UMG",
+				"AIModule",
+				"GameplayTasks",
 				
 				
 			}

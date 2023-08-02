@@ -44,6 +44,10 @@ public:
 	UFUNCTION()
 	void TestReflect(int32 Counter, FString InfoStr, bool& BackResult);
 	
+	// 临时方法，测试反射事件系统
+	UFUNCTION()
+	void TestNoParam();
+	
 public:
 	// 这个模组下的 子 模组
 	UPROPERTY()

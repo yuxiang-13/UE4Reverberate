@@ -32,56 +32,9 @@ protected:
 	float TimeCounter = 0;
 	
 protected:
-	struct TestReflectParam : DDParam
-	{
-		struct
-		{
-			int32 Counter;
-			FString InfoStr;
-			bool BackResult;
-		} Parameter;
+	// 使用  宏定义
+	DDMODFUNC_THREE(TestReflect, int32, Counter, FString, InfoStr, bool, BackResult);
 
-		int32 Counter() {return Parameter.Counter;};
-		FString InfoStr() {return Parameter.InfoStr;};
-		bool BackResult() {return Parameter.BackResult;};
-
-		// 构造，指定 参数指针
-		TestReflectParam() { ParamPtr = &Parameter; };
-	};
-
-	void TestReflect(int32 InModuleIndex, FName FunctionName, int32 Counter, FString InfoStr, bool BackResult)
-	{
-		DDModuleAgreement Agreement;
-		Agreement.ModuleIndex = InModuleIndex;
-		Agreement.FunctionName = FunctionName;
-
-		// 参数
-		TestReflectParam* Param = new TestReflectParam();
-		Param->Parameter.Counter = Counter;
-		Param->Parameter.InfoStr = InfoStr;
-		Param->Parameter.BackResult = BackResult;
-
-		ExecuteFunction(Agreement, Param);
-		// 销毁 参数指针
-		delete Param;
-	};
-
-	// 返回参数指针
-	TestReflectParam* TestReflectRT(int32 InModuleIndex, FName FunctionName, int32 Counter, FString InfoStr, bool BackResult)
-	{
-		DDModuleAgreement Agreement;
-		Agreement.ModuleIndex = InModuleIndex;
-		Agreement.FunctionName = FunctionName;
-
-		// 参数
-		TestReflectParam* Param = new TestReflectParam();
-		Param->Parameter.Counter = Counter;
-		Param->Parameter.InfoStr = InfoStr;
-		Param->Parameter.BackResult = BackResult;
-
-		ExecuteFunction(Agreement, Param);
-		// 返回 参数指针
-		return Param;
-	}
+	DDMODFUNC(HappyParam);
 };
 

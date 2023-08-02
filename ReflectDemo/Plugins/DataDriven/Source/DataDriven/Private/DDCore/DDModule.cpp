@@ -105,3 +105,9 @@ void UDDModule::TestReflect(int32 Counter, FString InfoStr, bool& BackResult)
 	BackResult = false;
 }
 
+void UDDModule::TestNoParam()
+{
+	DDH::Debug(10) << " No Param----" << "  模具 ----" << GetName() << DDH::Endl();
+	
+}
+

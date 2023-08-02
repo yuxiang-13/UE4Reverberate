@@ -37,6 +37,9 @@ public:
 
 	// 中心执行反射方法
 	void AllotExecuteFunction(DDModuleAgreement Agreement, DDParam* Param);
+
+	// 中心执行反射方法
+	void AllotExecuteFunction(DDObjectAgreement Agreement, DDParam* Param);
 protected:
 	// 中心模组保存 模组数组，顺序与枚举相同
 	UPROPERTY()

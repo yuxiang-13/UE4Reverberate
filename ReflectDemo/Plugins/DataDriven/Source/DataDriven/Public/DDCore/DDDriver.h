@@ -31,6 +31,9 @@ public:
 	// 执行反射方法
 	void ExecuteFunction(DDModuleAgreement Agreement, DDParam* Param);
 	
+	// 执行反射方法
+	void ExecuteFunction(DDObjectAgreement Agreement, DDParam* Param);
+	
 	// 驱动器驱动，UPROPERTY的变量发生变化时自动触发函数,函数内让中心模组触发 本模组以及子模组的类型设置
 	#if WITH_EDITOR
 	

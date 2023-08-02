@@ -36,9 +36,9 @@ public:
 	// 根据传入的对象名字  获取对象
 	void GetSelfObject(TArray<FName> TargetNameGroup, TArray<IDDOO*>& TargetObjectGroup);
 	// 根据传入的对象名称，获取这对象以外的，其他对象
-	void GetOtherObject(TArray<FName> TargetNameGroup, TArray<IDDOO*>& TargetObjectGroup);
+	int32 GetOtherObject(TArray<FName> TargetNameGroup, TArray<IDDOO*>& TargetObjectGroup);
 	// 根据类名，获取这个类中，除了传递参数的object的以外的其他对象
-	void GetClassOtherObject(TArray<FName> TargetNameGroup, TArray<IDDOO*>& TargetObjectGroup);
+	int32 GetClassOtherObject(TArray<FName> TargetNameGroup, TArray<IDDOO*>& TargetObjectGroup);
 	// 根据名字获取类对应的 所有对象
 	void GetSelfClass(TArray<FName> TargetNameGroup, TArray<IDDOO*>& TargetObjectGroup);
 	// 根据名字获取类以外的 所有对象

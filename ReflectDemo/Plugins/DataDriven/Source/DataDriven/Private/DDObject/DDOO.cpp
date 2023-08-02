@@ -120,7 +120,7 @@ FName IDDOO::GetClassName()
 	{
 		return IClassName;
 	}
-	IClassName = IBody->StaticClass()->GetFName();
+	IClassName = IBody->GetClass()->GetFName();
 	return IClassName;
 }
 
@@ -255,6 +255,19 @@ void IDDOO::DDDestroy()
 
 void IDDOO::ExecuteFunction(DDModuleAgreement Agreement, DDParam* Param)
 {
+	if (Agreement.ModuleIndex == ModuleIndex)
+	{
+		IModule->ExecuteFunction(Agreement, Param);
+	} else
+	{
+		// 查找对应模组的方法
+		IDriver->ExecuteFunction(Agreement, Param);
+	}
+}
+
+void IDDOO::ExecuteFunction(DDObjectAgreement Agreement, DDParam* Param)
+{
+	// 本模组  和  非本模组
 	if (Agreement.ModuleIndex == ModuleIndex)
 	{
 		IModule->ExecuteFunction(Agreement, Param);

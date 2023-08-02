@@ -69,7 +69,7 @@ namespace DDH
 			return FString("InValue");
 		} else
 		{
-			return EnumPtr->GetNameByValue((int32)Value);
+			return EnumPtr->GetNameByValue((int32)Value).ToString();
 		}
 	};
 
@@ -113,6 +113,13 @@ namespace DDH
 			return EnumPtr->GetIndexByName(Value);
 		}
 	}
+
+	// 获取反射调用结果
+	FORCEINLINE FString GetCallResult(ECallResult Value)
+	{
+		const UEnum* EnumPtr = FindObject<UEnum>((UObject*)ANY_PACKAGE, *FString("ECallResult"), true);
+		return EnumPtr->GetNameByValue((int32)Value).ToString();
+	};
 }
 
 

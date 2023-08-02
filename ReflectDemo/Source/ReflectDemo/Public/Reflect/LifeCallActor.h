@@ -28,6 +28,9 @@ public:
 	virtual void DDUnLoading() override;//销毁绑定资源
 	
 	virtual void DDRelease() override;//释放自己
+
+	UFUNCTION()
+	void AcceptCall(FString InfiStr);
 protected:
 	float TimeCounter = 0;
 	

@@ -84,6 +84,8 @@ protected:
 	// 执行反射方法
 	void ExecuteFunction(DDModuleAgreement Agreement, DDParam* Param);
 	
+	// 执行反射方法
+	void ExecuteFunction(DDObjectAgreement Agreement, DDParam* Param);
 protected:
 	// 保存自身UObject
 	UObject* IBody;

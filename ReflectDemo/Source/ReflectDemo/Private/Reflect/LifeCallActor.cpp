@@ -9,25 +9,25 @@ void ALifeCallActor::DDInit()
 
 	IsAllowTickEvent = true;
 
-	DDH::Debug(10) << " DDInit " << DDH::Endl();
+	// DDH::Debug(10) << " DDInit " << DDH::Endl();
 }
 
 void ALifeCallActor::DDLoading()
 {
 	Super::DDLoading();
-	DDH::Debug(10) << " DDLoading " << DDH::Endl();
+	// DDH::Debug(10) << " DDLoading " << DDH::Endl();
 }
 
 void ALifeCallActor::DDRegister()
 {
 	Super::DDRegister();
-	DDH::Debug(10) << " DDRegister " << DDH::Endl();
+	// DDH::Debug(10) << " DDRegister " << DDH::Endl();
 }
 
 void ALifeCallActor::DDEnable()
 {
 	Super::DDEnable();
-	DDH::Debug(10) << " DDEnable " << DDH::Endl();
+	// DDH::Debug(10) << " DDEnable " << DDH::Endl();
 
 	// TestReflect(ModuleIndex, "TestReflect", 13, "happy", true);
 
@@ -36,22 +36,25 @@ void ALifeCallActor::DDEnable()
 	// delete ResultParam;
 
 
-	HappyParam((int32)ERCGameModule::HUD, "TestNoParam");
+	// HappyParam((int32)ERCGameModule::HUD, "TestNoParam");
+
+
+	
 }
 
 void ALifeCallActor::DDTick(float DeltaSeconds)
 {
 	Super::DDTick(DeltaSeconds);
-	DDH::Debug(0) << " DDTick " << DDH::Endl();
+	// DDH::Debug(0) << " DDTick " << DDH::Endl();
 
 	TimeCounter++;
 	if (TimeCounter < 3)
 	{
-		DDH::Debug(10) << " DDTick --->>>" << TimeCounter << DDH::Endl();
+		// DDH::Debug(10) << " DDTick --->>>" << TimeCounter << DDH::Endl();
 	} else if (TimeCounter == 3) 
 	{
 		DDDestroy();
-		DDH::Debug(10) << " DDDestroy --->>>" << DDH::Endl();
+		// DDH::Debug(10) << " DDDestroy --->>>" << DDH::Endl();
 	}
 }
 
@@ -60,23 +63,28 @@ void ALifeCallActor::DDTick(float DeltaSeconds)
 void ALifeCallActor::DDDisable()
 {
 	Super::DDDisable();
-	DDH::Debug(10) << " DDDisable " << DDH::Endl();
+	// DDH::Debug(10) << " DDDisable " << DDH::Endl();
 }
 
 void ALifeCallActor::DDUnRegister()
 {
 	Super::DDUnRegister();
-	DDH::Debug(10) << " DDUnRegister " << DDH::Endl();
+	// DDH::Debug(10) << " DDUnRegister " << DDH::Endl();
 }
 
 void ALifeCallActor::DDUnLoading()
 {
 	Super::DDUnLoading();
-	DDH::Debug(10) << " DDUnLoading " << DDH::Endl();
+	// DDH::Debug(10) << " DDUnLoading " << DDH::Endl();
 }
 
 void ALifeCallActor::DDRelease()
 {
 	Super::DDRelease();
-	DDH::Debug(10) << " DDRelease " << DDH::Endl();
+	// DDH::Debug(10) << " DDRelease " << DDH::Endl();
+}
+
+void ALifeCallActor::AcceptCall(FString InfiStr)
+{
+	DDH::Debug(10) << GetObjectName() << " - - - ->" << InfiStr << DDH::Endl();
 }

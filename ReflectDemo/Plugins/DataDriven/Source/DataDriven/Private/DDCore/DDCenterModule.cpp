@@ -124,3 +124,15 @@ void UDDCenterModule::AllotExecuteFunction(DDModuleAgreement Agreement, DDParam*
 		Param->CallResult = ECallResult::NoModule;
 	}
 }
+
+void UDDCenterModule::AllotExecuteFunction(DDObjectAgreement Agreement, DDParam* Param)
+{
+	// 查看模组是否存在
+	if (Agreement.ModuleIndex < ModuleGroup.Num() && ModuleGroup[Agreement.ModuleIndex])
+	{
+		ModuleGroup[Agreement.ModuleIndex]->ExecuteFunction(Agreement, Param);
+	} else
+	{
+		Param->CallResult = ECallResult::NoModule;
+	}
+}

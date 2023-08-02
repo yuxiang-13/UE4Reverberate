@@ -34,6 +34,9 @@ public:
 
 	// 注册对象到 模组
 	bool RegisterToModule(IDDOO* ObjctInst);
+
+	// 中心执行反射方法
+	void AllotExecuteFunction(DDModuleAgreement Agreement, DDParam* Param);
 protected:
 	// 中心模组保存 模组数组，顺序与枚举相同
 	UPROPERTY()

@@ -75,8 +75,51 @@ enum class EAgreementType:uint8
 	All                //给所有的对象通信
 };
 
-#pragma endregion
+// 调用结果，项目开发时，请确保每次都能第哦那个用成功
+UENUM()
+enum class ECallResult: uint8
+{
+	NoModule = 0, // 缺失模组
+	LackObject, // 缺失对象
+	NoFunction, // 缺失方法
+	Succeed // 调用成功
+};
 
+// 通信参数结构体
+struct DDParam
+{
+public:
+	// 调用结果
+	ECallResult CallResult;
+	// 参数指针
+	void *ParamPtr;
+};
+
+// 通信协议，Module模组方法
+struct DDModuleAgreement
+{
+public:
+	// 模组ID
+	int32 ModuleIndex;
+	// 方法名
+	FName FunctionName;
+};
+
+// 通信协议，DDOO (对象) 方法
+struct DDObjectAgreement
+{
+public:
+	// 模组ID
+	int32 ModuleIndex;
+	// 协议类型
+	EAgreementType AGreementType;
+	// 对象组名
+	TArray<FName> ObjectGroup;
+	// 方法名
+	FName FunctionName;
+};
+
+#pragma endregion
 
 
 

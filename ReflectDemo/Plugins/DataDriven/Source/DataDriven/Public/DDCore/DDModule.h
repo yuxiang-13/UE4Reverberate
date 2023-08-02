@@ -36,6 +36,14 @@ public:
 
 	// 模组所属对象的 销毁自身
 	void ChildDestroy(FName ObjectName);
+
+	// 调用模组的方法
+	void ExecuteFunction(DDModuleAgreement Agreement, DDParam* Param);
+
+	// 临时方法，测试反射事件系统
+	UFUNCTION()
+	void TestReflect(int32 Counter, FString InfoStr, bool& BackResult);
+	
 public:
 	// 这个模组下的 子 模组
 	UPROPERTY()

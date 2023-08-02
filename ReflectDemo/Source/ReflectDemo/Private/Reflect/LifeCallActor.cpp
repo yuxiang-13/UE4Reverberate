@@ -28,6 +28,12 @@ void ALifeCallActor::DDEnable()
 {
 	Super::DDEnable();
 	DDH::Debug(10) << " DDEnable " << DDH::Endl();
+
+	// TestReflect(ModuleIndex, "TestReflect", 13, "happy", true);
+
+	TestReflectParam* ResultParam = TestReflectRT((int32)ERCGameModule::HUD, "TestReflect", 13, "happy", true);
+	DDH::Debug(10) << " ResultParam ---> " << ResultParam->BackResult() << DDH::Endl();
+	delete ResultParam;
 }
 
 void ALifeCallActor::DDTick(float DeltaSeconds)

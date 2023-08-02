@@ -81,6 +81,10 @@ public:
 	EBaseObjectState RunState;
 	
 protected:
+	// 执行反射方法
+	void ExecuteFunction(DDModuleAgreement Agreement, DDParam* Param);
+	
+protected:
 	// 保存自身UObject
 	UObject* IBody;
 

@@ -112,3 +112,15 @@ bool UDDCenterModule::RegisterToModule(IDDOO* ObjctInst)
 	}
 	return false;
 }
+
+void UDDCenterModule::AllotExecuteFunction(DDModuleAgreement Agreement, DDParam* Param)
+{
+	// 查看模组是否存在
+	if (Agreement.ModuleIndex < ModuleGroup.Num() && ModuleGroup[Agreement.ModuleIndex])
+	{
+		ModuleGroup[Agreement.ModuleIndex]->ExecuteFunction(Agreement, Param);
+	} else
+	{
+		Param->CallResult = ECallResult::NoModule;
+	}
+}

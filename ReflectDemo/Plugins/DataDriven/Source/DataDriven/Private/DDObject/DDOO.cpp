@@ -251,4 +251,16 @@ void IDDOO::DDRelease() {};
 void IDDOO::DDDestroy()
 {
 	IModule->ChildDestroy(GetObjectName());
+}
+
+void IDDOO::ExecuteFunction(DDModuleAgreement Agreement, DDParam* Param)
+{
+	if (Agreement.ModuleIndex == ModuleIndex)
+	{
+		IModule->ExecuteFunction(Agreement, Param);
+	} else
+	{
+		// 查找对应模组的方法
+		IDriver->ExecuteFunction(Agreement, Param);
+	}
 };

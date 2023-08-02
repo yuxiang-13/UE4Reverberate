@@ -65,6 +65,11 @@ void ADDDriver::RegisterGamePlay()
 	}
 }
 
+void ADDDriver::ExecuteFunction(DDModuleAgreement Agreement, DDParam* Param)
+{
+	Center->AllotExecuteFunction(Agreement, Param);
+}
+
 void ADDDriver::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);

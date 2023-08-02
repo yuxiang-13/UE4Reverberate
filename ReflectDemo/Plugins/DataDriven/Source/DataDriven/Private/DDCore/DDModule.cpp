@@ -81,3 +81,27 @@ void UDDModule::ChildDestroy(FName ObjectName)
 	Model->DestroyObject(ObjectName);
 }
 
+void UDDModule::ExecuteFunction(DDModuleAgreement Agreement, DDParam* Param)
+{
+	// 调用Module的UFunction
+	UFunction* ExeFunc = this->FindFunction(Agreement.FunctionName);
+	if (ExeFunc)
+	{
+		// 设置调用成功
+		Param->CallResult = ECallResult::Succeed;
+		// 调用方法
+		ProcessEvent(ExeFunc, Param->ParamPtr);
+	} else
+	{
+		// 设置方法不存在
+		Param->CallResult = ECallResult::NoFunction;
+	}
+}
+
+void UDDModule::TestReflect(int32 Counter, FString InfoStr, bool& BackResult)
+{
+	DDH::Debug(10) << "Counter----"  << "  ;  " << InfoStr  << "  模具 ----" << GetName() << DDH::Endl();
+
+	BackResult = false;
+}
+

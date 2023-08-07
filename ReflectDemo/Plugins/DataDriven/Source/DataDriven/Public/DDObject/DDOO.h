@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "DDCore/DDDriver.h"
 #include "DDCore/DDModule.h"
 #include "UObject/Interface.h"
 #include "DDOO.generated.h"
@@ -70,6 +71,9 @@ public:
 	virtual void OnDisable();
 	// 销毁自己
 	void DDDestroy();
+
+
+	
 public:
 	//是否允许帧运行,如果要允许帧运行需要在构造函数或者BeginPlay设置,在UE4里默认为false
 	bool IsAllowTickEvent;
@@ -86,6 +90,14 @@ protected:
 	
 	// 执行反射方法
 	void ExecuteFunction(DDObjectAgreement Agreement, DDParam* Param);
+	
+	// 注册调用接口
+	template<typename RetType, typename ... VarTypes>
+	DDCallHandle<RetType, VarTypes ...> RegisterCallPort(FName CallName);
+	// 注册方法接口
+	// 特殊在，需要传 模组ID， 来确定指定要注册方法到指定模组下的 事件节点
+	template<typename RetType, typename... VarTypes>
+	DDFunHandle RegisterFunPort(int32 ModuleID, FName CallName, TFunction<RetType(VarTypes...)> InsFun);
 protected:
 	// 保存自身UObject
 	UObject* IBody;
@@ -105,3 +117,22 @@ protected:
 	// 对应模组的序号
 	int32 ModuleIndex;
 };
+
+// 注册到此对象自身所在模组下的 Message消息模块下
+template <typename RetType, typename ... VarTypes>
+DDCallHandle<RetType, VarTypes...> IDDOO::RegisterCallPort(FName CallName)
+{
+	// 本模组下的方法
+	return IModule->RegisterCallPort<RetType, VarTypes...>(CallName);
+}
+
+// 特殊在，需要传 模组ID， 来确定指定要注册方法到指定模组下的 事件节点
+template <typename RetType, typename ... VarTypes>
+DDFunHandle IDDOO::RegisterFunPort(int32 ModuleID, FName CallName, TFunction<RetType(VarTypes...)> InsFun)
+{
+	// 是本模组
+	if (ModuleIndex == ModuleID)
+		return IModule->RegisterFunPort<RetType, VarTypes...>(CallName, InsFun);
+	else
+		return IDriver->RegisterFunPort<RetType, VarTypes...>(ModuleID, CallName, InsFun);
+}

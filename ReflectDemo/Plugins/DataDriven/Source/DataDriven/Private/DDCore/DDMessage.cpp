@@ -3,6 +3,11 @@
 
 #include "DDCore/DDMessage.h"
 
+UDDMessage::UDDMessage()
+{
+	MsgQuene = new DDMsgQuene();
+}
+
 void UDDMessage::MessageInit()
 {
 }

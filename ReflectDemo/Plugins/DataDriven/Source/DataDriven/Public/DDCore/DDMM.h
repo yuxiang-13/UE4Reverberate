@@ -9,7 +9,6 @@
 #include "DDMM.generated.h"
 
 class UDDModule;
-class ADDDriver;
 
 
 UINTERFACE(MinimalAPI)

@@ -42,6 +42,10 @@ public:
 
     #endif
 	
+	// 特殊在，需要传 模组ID， 来确定指定要注册方法到指定模组下的 事件节点
+	template<typename RetType, typename... VarTypes>
+	DDFunHandle RegisterFunPort(int32 ModuleID, FName CallName, TFunction<RetType(VarTypes...)> InsFun);
+	
 public:
 	UPROPERTY(EditAnywhere, NoClear, BlueprintReadOnly, Category="DataDriven")
 	USceneComponent* RootScene;
@@ -65,3 +69,9 @@ protected:
 	bool IsBeginePlay;
 	
 };
+
+template <typename RetType, typename ... VarTypes>
+DDFunHandle ADDDriver::RegisterFunPort(int32 ModuleID, FName CallName, TFunction<RetType(VarTypes...)> InsFun)
+{
+	return Center->AllotRegisterFunPort<RetType, VarTypes ...>(ModuleID, CallName, InsFun);
+}

@@ -57,6 +57,12 @@ public:
 	// 调用对象的方法
 	void ExecuteFunction(DDObjectAgreement Agreement, DDParam* Param);
 	
+	// 注册调用接口
+	template<typename RetType, typename ... VarTypes>
+	DDCallHandle<RetType, VarTypes ...> RegisterCallPort(FName CallName);
+	// 注册方法接口
+	template<typename RetType, typename... VarTypes>
+	DDFunHandle RegisterFunPort(FName CallName, TFunction<RetType(VarTypes...)> InsFun);
 public:
 	// 这个模组下的 子 模组
 	UPROPERTY()
@@ -89,3 +95,15 @@ protected:
 
 	
 };
+
+template <typename RetType, typename ... VarTypes>
+DDCallHandle<RetType, VarTypes...> UDDModule::RegisterCallPort(FName CallName)
+{
+	return Message->RegisterCallPort<RetType, VarTypes ...>(CallName);
+}
+
+template <typename RetType, typename ... VarTypes>
+DDFunHandle UDDModule::RegisterFunPort(FName CallName, TFunction<RetType(VarTypes...)> InsFun)
+{
+	return Message->RegisterFunPort<RetType, VarTypes...>(CallName, InsFun);
+}

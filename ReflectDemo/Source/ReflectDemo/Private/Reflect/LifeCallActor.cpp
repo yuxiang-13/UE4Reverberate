@@ -22,7 +22,23 @@ void ALifeCallActor::DDRegister()
 {
 	Super::DDRegister();
 	// DDH::Debug(10) << " DDRegister " << DDH::Endl();
+
+	TFunction<int32(FString)> InFun = [this](FString InfoStr)
+	{
+		return RegTest(InfoStr);
+	};
+
+	
+	// 把这个方法  注册到这个模组下消息模块，内的名字叫 "RegCall" 的消息节点
+	RegFunHandle = RegisterFunPort<int32, FString>((int32)ERCGameModule::Player, "RegCall", InFun);
 }
+
+int32 ALifeCallActor::RegTest(FString InfoStr)
+{
+	DDH::Debug(0.f) << GetObjectName() << " RegFun- - - -> get Reg Call =" << InfoStr << DDH::Endl();
+	return 123;
+}
+
 
 void ALifeCallActor::DDEnable()
 {
@@ -51,9 +67,12 @@ void ALifeCallActor::DDTick(float DeltaSeconds)
 	if (TimeCounter < 3)
 	{
 		// DDH::Debug(10) << " DDTick --->>>" << TimeCounter << DDH::Endl();
-	} else if (TimeCounter == 3) 
+	} else if (TimeCounter == 450) 
 	{
-		DDDestroy();
+		// 如果有设置调用接口与和方法接口，建议在DDUnRegister生命周期函数时候 写注销方法
+		RegFunHandle.UnRegister();
+		
+		// DDDestroy();
 		// DDH::Debug(10) << " DDDestroy --->>>" << DDH::Endl();
 	}
 }

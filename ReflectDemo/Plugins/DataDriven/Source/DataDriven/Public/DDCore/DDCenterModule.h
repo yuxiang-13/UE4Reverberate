@@ -40,9 +40,28 @@ public:
 
 	// 中心执行反射方法
 	void AllotExecuteFunction(DDObjectAgreement Agreement, DDParam* Param);
+
+	
+	// 注册方法接口
+	// 特殊在，需要传 模组ID， 来确定指定要注册方法到指定模组下的 事件节点
+	template<typename RetType, typename... VarTypes>
+	DDFunHandle AllotRegisterFunPort(int32 ModuleID, FName CallName, TFunction<RetType(VarTypes...)> InsFun);
 protected:
 	// 中心模组保存 模组数组，顺序与枚举相同
 	UPROPERTY()
 	TArray<UDDModule*> ModuleGroup;
 	
-}; 
+};
+
+template <typename RetType, typename ... VarTypes>
+DDFunHandle UDDCenterModule::AllotRegisterFunPort(int32 ModuleID, FName CallName, TFunction<RetType(VarTypes...)> InsFun)
+{
+	if (ModuleGroup[ModuleID])
+	{
+		return ModuleGroup[ModuleID]->RegisterFunPort<RetType, VarTypes...>(CallName, InsFun);
+	} else
+	{
+		// 返回没有任何的方法句柄
+		return DDFunHandle();
+	}
+}

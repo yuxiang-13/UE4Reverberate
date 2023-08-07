@@ -222,4 +222,409 @@ public:
 
 
 
+// 存储任意类型方法函数的结构体
+#pragma region DDAnyFunc  // 英 /ˈriːdʒən/ 区域
+ 
+// 存储任意方法结构体
+struct DDAnyFun
+{
+	// 父类
+	struct BaseFun
+	{
+	public:
+		virtual ~BaseFun() {};
+	};
+	// 子类
+	template<typename RetType, typename ... VarTypes>
+	struct ChildValFun : public BaseFun
+	{
+	public:
+		TFunction<RetType(VarTypes...)> TarFun;
+	public:
+		ChildValFun(const TFunction<RetType(VarTypes...)> InFun) : TarFun(InFun) {};
+		RetType Execute(VarTypes... Params)
+		{
+			return TarFun(Params...);
+		}
+	};
+	
+public:
+	BaseFun* FunPtr;
+public:
+	DDAnyFun() : FunPtr(NULL) {};
+	template<typename RetType, typename ... VarTypes>
+	DDAnyFun(const TFunction<RetType(VarTypes...)> InFun): FunPtr( new ChildValFun(InFun) ) {};
+	
+	~DDAnyFun() { delete FunPtr;  };
+
+	// 执行
+	template<typename RetType, typename ... VarTypes>
+	RetType Execute(VarTypes ... Params)
+	{
+		// 强转成 子类 类指针,子类使用模板，那我们不动自动推导，手动指定模板类型
+		ChildValFun<RetType, VarTypes...>* SubFunPtr = static_cast<ChildValFun<RetType, VarTypes...>*>(FunPtr);
+		return SubFunPtr->Execute( Params ... );
+	};
+	// 获取 子类结构体中 保存的函数指针
+	template<typename RetType, typename ... VarTypes>
+	TFunction<RetType(VarTypes ...)>& GetFunc()
+	{
+		ChildValFun<RetType, VarTypes...>* SubFunPtr = static_cast<ChildValFun<RetType, VarTypes...>*>(FunPtr);
+		return SubFunPtr.TarFun;
+	}
+	
+};
+
+#pragma endregion
+
+
+
+
+
+#pragma region DDMsgNode
+
+// 事件节点
+struct DDMsgNode
+{
+	// 被调用的接口数量
+	int32 CallCount;
+	// 方法列表
+	TMap<int32, DDAnyFun*> FunQuene;
+	// 注册方法
+	template<typename RetType, typename ... VarTypes>
+	int32 RegisterFun(TFunction<RetType(VarTypes...)> InsFun);
+	// 注销方法
+	void UnRegisterFun(int32 FunID)
+	{
+		// 从列表移除对象
+		DDAnyFun* DesPtr = *FunQuene.Find(FunID);
+		FunQuene.Remove(FunID);
+		delete DesPtr;
+	}
+	// 清空节点
+	void ClearNode()
+	{
+		TArray<int32> KeysToDelete;
+		for (auto& Pair : FunQuene)
+		{
+			KeysToDelete.Add(Pair.Key);
+		}
+		for (int32 i = KeysToDelete.Num() - 1; i >= 0; --i)
+		{
+			DDAnyFun* DesPtr = *FunQuene.Find(KeysToDelete[i]);
+			delete DesPtr;
+		}
+
+	}
+	// 执行方法
+	template<typename RetType, typename ... VarTypes>
+	RetType Execute(VarTypes ... Params);
+	// 判断是否有绑定的函数
+	bool IsBound() { return FunQuene.Num() > 0; };
+	// 如果有绑定函数，就去执行
+	template<typename RetType, typename ... VarTypes>
+	bool ExecuteIfBound(VarTypes ... Params);
+	// 构造
+	DDMsgNode() : CallCount(0) {}
+	
+	
+};
+
+template <typename RetType, typename ... VarTypes>
+int32 DDMsgNode::RegisterFun(TFunction<RetType(VarTypes...)> InsFun)
+{
+	// 获取方法序列里的所有下标
+	TArray<int32> FunKeyQuene;
+	FunQuene.GenerateKeyArray(FunKeyQuene);
+	// 获取新下标
+	int32 NewID;
+	for (int32 i = FunKeyQuene.Num(); i>= 0; --i)
+	{
+		// 思考数组空时候，是否适用
+		if (!FunKeyQuene.Contains(i))
+		{
+			NewID = i;
+			break;
+		}
+	}
+	// 将新方法添加到节点
+	FunQuene.Add(NewID, new DDAnyFun(InsFun));
+	return NewID;
+}
+
+template <typename RetType, typename ... VarTypes>
+RetType DDMsgNode::Execute(VarTypes... Params)
+{
+	// 从第二个开始遍历
+	TMap<int32, DDAnyFun*>::TIterator It(FunQuene);
+	++It;
+	for (; It; ++It)
+	{
+		It.Value()->Execute<RetType, VarTypes ...>(Params...);
+	}
+	// 返回第一个Map中的值
+	TMap<int32, DDAnyFun*>::TIterator FirstIt(FunQuene);
+	return FirstIt.Value()->Execute<RetType, VarTypes ...>(Params...);
+}
+
+template <typename RetType, typename ... VarTypes>
+bool DDMsgNode::ExecuteIfBound(VarTypes... Params)
+{
+	if (!IsBound()) return false;
+
+	for (TMap<int32, DDAnyFun*>::TIterator It(FunQuene); It; ++It)
+	{
+		It.Value()->Execute<RetType, VarTypes... >(Params...);
+	}
+	return true;
+}
+
+#pragma endregion
+
+
+
+
+
+#pragma region DDCallHandle
+
+struct DDMsgQuene;
+// 调用句柄  （用于注册、注销）【名字 对应 节点】
+template<typename RetType, typename ... Vartypes>
+struct DDCallHandle
+{
+public:
+	// 事件队列
+	DDMsgQuene* MsgQuene;
+	// 节点名, 调用名
+	FName CallName;
+	// 此一类方法是否是 激活状态,用于重写 = 等号操作符保存状态
+	// 让所有 共用这个 共享指针的方法，不能二次注销，从而保证，只注销一次
+	TSharedPtr<bool> IsActived;
+
+public:
+	// 构造函数
+	DDCallHandle(){}
+	DDCallHandle(DDMsgQuene* MQ, FName CN): MsgQuene(MQ), CallName(CN)
+	{
+		// 构造时，状态设置为激活状态
+		IsActived = MakeShareable<bool>( new bool(true) );
+	}
+	// 重写操作符
+	DDCallHandle<RetType, Vartypes ...>& operator= (const DDCallHandle<RetType, Vartypes ...>& Other)
+	{
+		if (this == &Other)
+		{
+			return *this;
+		} else
+		{
+			MsgQuene = Other.MsgQuene;
+			CallName = Other.CallName;
+			IsActived = Other.IsActived;
+			return *this;
+		}
+	}
+
+	// 执行方法
+	RetType Execute(Vartypes... Params);
+	// 是否绑定
+	bool IsBound();
+	// 如果绑定就执行
+	bool ExecuteIfBound(Vartypes... Params);
+	// 注销调用接口
+	void UnRegister();
+};
+
+
+template <typename RetType, typename ... Vartypes>
+RetType DDCallHandle<RetType, Vartypes...>::Execute(Vartypes... Params)
+{
+	if (!IsBound() || ! *IsActived.Get() )
+	{
+		return NULL;
+	} else
+	{
+		return MsgQuene->Execute<RetType, Vartypes...>(CallName, Params...);
+	}
+}
+
+template <typename RetType, typename ... Vartypes>
+bool DDCallHandle<RetType, Vartypes...>::IsBound()
+{
+	if ( ! *IsActived.Get() )
+		return false;
+	return MsgQuene->IsBound(CallName);
+}
+
+template <typename RetType, typename ... Vartypes>
+bool DDCallHandle<RetType, Vartypes...>::ExecuteIfBound(Vartypes... Params)
+{
+	if (!IsBound() || ! *IsActived.Get())
+		return false;
+	MsgQuene->Execute<RetType, Vartypes...>(CallName, Params...);
+	return true;
+}
+
+template <typename RetType, typename ... Vartypes>
+void DDCallHandle<RetType, Vartypes...>::UnRegister()
+{
+	if (*IsActived.Get())
+		MsgQuene->UnRegisterCallPort(CallName);
+
+	*IsActived.Get() = false; // 让所有 共用这个 共享指针的方法，不能二次注销，从而保证，只注销一次
+}
+
+#pragma endregion
+
+
+
+#pragma region DDMsgQuene
+
+struct DDFunHandle;
+// 事件队列
+struct DDMsgQuene
+{
+	// 节点序列
+	TMap<FName, DDMsgNode> MsgQuene;
+	// 注册调用接口
+	template<typename RetType, typename ... Vartypes>
+	DDCallHandle<RetType, Vartypes...> RegisterCallPort(FName CallName);
+	
+	// 注册方法接口
+	template<typename RetType, typename... VarTypes>
+	DDFunHandle RegisterFunPort(FName CallName, TFunction<RetType(VarTypes...)> InsFun);
+	// 注销 调用接口
+	void UnRegisterCallPort(FName CallName)
+	{
+		if (!MsgQuene.Contains(CallName))
+			return;
+		// 获取时间节点
+		DDMsgNode* MsgNode = MsgQuene.Find(CallName);
+		// 让对应的节点调用计数器-1，如果计数器小于等于0，就移除调用接口
+		MsgNode->CallCount--;
+		if (MsgNode->CallCount <= 0)
+		{
+			MsgNode->ClearNode();
+			MsgQuene.Remove(CallName);
+		}
+	}
+	// 注销 方法接口
+	void UnRegisterFunPort(FName CallName, int32 FunID)
+	{
+		if (!MsgQuene.Contains(CallName))
+			return;
+		MsgQuene.Find(CallName)->UnRegisterFun(FunID);
+	}
+	// 执行方法接口
+	template<typename RetType, typename ... VarTypes>
+	RetType Execute(FName CallName, VarTypes... Params);
+	// 是否已经绑定方法
+	bool IsBound(FName CallName) { return MsgQuene.Find(CallName)->IsBound(); };
+};
+
+
+template<typename RetType, typename ... Vartypes>
+DDCallHandle<RetType, Vartypes...> DDMsgQuene::RegisterCallPort(FName CallName)
+{
+	// 如果已经存在对应CallName的调用接口，就把调用计数器+1
+	if (MsgQuene.Contains(CallName))
+	{
+		MsgQuene.Find(CallName)->CallCount++;
+	} else
+	{
+		// 创建新的事件节点 并且 添加到队列  ue4 ，struct结构体类A， 让 TMap存储  A() 和   TMap存储 new A() 的区别
+		/*
+		 * 在 UE4 中，当我们将结构体类 A 存储在 TMap 中时，它的实例不需要被手动删除，因为结构体的实例是在栈上分配和管理的，
+		 * 并随着 TMap 的销毁而被自动销毁，这就是传值语义。
+		 * 
+		 * 而当我们将通过 new 操作符手动分配并生成的结构体类 A 的指针存储在 TMap 中时，它们是在堆上分配的。
+		 * 在 TMap 销毁时，只会释放分配的空间，不会删除每个实例本身。如果不手动释放这些实例，将会导致内存泄漏和程序崩溃。
+		 *
+		 * 基本上，把结构体类 A 的实例以 new A() 的形式存储在 TMap 中是不必要的，应该直接存储 A 的实例。
+		 */
+		MsgQuene.Add(CallName, DDMsgNode());
+		// 计数器+1
+		MsgQuene.Find(CallName)->CallCount++;
+	}
+	// 返回调用句柄
+	return DDCallHandle<RetType, Vartypes...>(this, CallName);
+}
+
+
+template<typename RetType, typename... VarTypes>
+DDFunHandle DDMsgQuene::RegisterFunPort(FName CallName, TFunction<RetType(VarTypes...)> InsFun)
+{
+	//获取新的方法下标
+	int32 FunID;
+	//如果不存在CallName对应的节点
+	if (!MsgQuene.Contains(CallName))
+	{
+		//创建新的事件节点并且添加到队列
+		MsgQuene.Add(CallName, DDMsgNode());
+	}
+	//直接将新的方法注册到节点
+	FunID = MsgQuene.Find(CallName)->RegisterFun(InsFun);
+	//返回方法句柄
+	return DDFunHandle(this, CallName, FunID);
+}
+
+template <typename RetType, typename ... VarTypes>
+RetType DDMsgQuene::Execute(FName CallName, VarTypes... Params)
+{
+	return MsgQuene.Find(CallName)->Execute<RetType, VarTypes...>(Params ...);
+}
+#pragma endregion
+
+
+
+#pragma region DDFunHandle
+
+// 函数句柄
+struct DDFunHandle
+{
+public:
+	//消息队列
+	DDMsgQuene* MsgQuene;
+	//调用名字
+	FName CallName;
+	//方法ID
+	int32 FunID;
+	//是否有效
+	TSharedPtr<bool> IsActived;
+	//注销方法
+public:
+	DDFunHandle() {};
+	DDFunHandle(DDMsgQuene* MQ, FName CN, int32 FI)
+	{
+		MsgQuene = MQ;
+		CallName = CN;
+		FunID = FI;
+		// 设置状态为激活
+		IsActived = MakeShareable<bool>(new bool(true));
+	};
+	// 重写=号操作符
+	DDFunHandle& operator=(const DDFunHandle& Other)
+	{
+		if (this == &Other)
+			return *this;
+		MsgQuene = Other.MsgQuene;
+		CallName = Other.CallName;
+		FunID = Other.FunID;
+		IsActived = Other.IsActived;
+		return *this;
+	};
+	// 注销方法
+	void UnRegister()
+	{
+		if (*IsActived.Get())
+		{
+			MsgQuene->UnRegisterFunPort(CallName, FunID);
+		}
+		// 设置为失活
+		*IsActived.Get() = false;
+	}
+};
+
+#pragma endregion
+
+
 

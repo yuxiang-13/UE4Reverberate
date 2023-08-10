@@ -154,6 +154,21 @@ void UDDModule::StopAllCorotine(FName ObjectName)
 	return Message->StopAllCorotine(ObjectName);
 }
 
+bool UDDModule::StartInvoke(FName ObjectName, FName InvokeName, DDInvokeTask* InvokeTask)
+{
+	return Message->StartInvoke(ObjectName, InvokeName, InvokeTask);
+}
+
+bool UDDModule::StopInvoke(FName ObjectName, FName InvokeName)
+{
+	return Message->StopInvoke(ObjectName, InvokeName);
+}
+
+void UDDModule::StopAllInvoke(FName ObjectName)
+{
+	return Message->StopAllInvoke(ObjectName);
+}
+
 void UDDModule::ExecuteSelfObject(DDObjectAgreement Agreement, DDParam* Param)
 {
 	//定义存储目标对象的组

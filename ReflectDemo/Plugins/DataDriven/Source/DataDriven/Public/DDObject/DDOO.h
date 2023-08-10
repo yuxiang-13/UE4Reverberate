@@ -117,6 +117,17 @@ protected:
 	//停止该对象的所有协程
 	void StopAllCorotine();
 
+	// 延迟运行
+	template<typename UserClass>
+	bool InvokeDelay(FName InvokeName, float DelayTime, UserClass* UserObj, typename FDDInvokeEvent::TUObjectMethodDelegate<UserClass>::FMethodPtr OnMethod);
+	// 延迟循环运行
+	template<typename UserClass>
+	bool InvokeRepeat(FName InvokeName, float DelayTime, float RepeatTime, UserClass* UserObj, typename FDDInvokeEvent::TUObjectMethodDelegate<UserClass>::FMethodPtr InMethod);
+	
+	// 关闭延迟方法
+	bool StopInvoke(FName InVokeName);
+	// 关闭所有对象下延迟
+	void StopAllInvoke();
 protected:
 
 	//保存自身的UObject
@@ -154,4 +165,22 @@ DDFunHandle IDDOO::RegisterFunPort(int32 ModuleID, FName CallName, TFunction<Ret
 		return IModule->RegisterFunPort<RetType, VarTypes...>(CallName, InsFun);
 	else
 		return IDriver->RegisterFunPort<RetType, VarTypes...>(ModuleID, CallName, InsFun);
+}
+
+template <typename UserClass>
+bool IDDOO::InvokeDelay(FName InvokeName, float DelayTime, UserClass* UserObj,
+	typename FDDInvokeEvent::TUObjectMethodDelegate<UserClass>::FMethodPtr InMethod)
+{
+	DDInvokeTask* InvokeTask = new DDInvokeTask(DelayTime, false, 0.f);
+	InvokeTask->InvokeEvent.BindUObject(UserObj, InMethod);
+	return IModule->StartInvoke(GetObjectName(), InvokeName, InvokeTask);
+}
+
+template <typename UserClass>
+bool IDDOO::InvokeRepeat(FName InvokeName, float DelayTime, float RepeatTime, UserClass* UserObj,
+	typename FDDInvokeEvent::TUObjectMethodDelegate<UserClass>::FMethodPtr InMethod)
+{
+	DDInvokeTask* InvokeTask = new DDInvokeTask(DelayTime, true, RepeatTime);
+	InvokeTask->InvokeEvent.BindUObject(UserObj, InMethod);
+	return IModule->StartInvoke(GetObjectName(), InvokeName, InvokeTask);
 }

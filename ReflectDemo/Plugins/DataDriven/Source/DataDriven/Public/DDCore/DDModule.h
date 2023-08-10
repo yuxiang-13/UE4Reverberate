@@ -77,6 +77,13 @@ public:
 	//停止该对象的所有协程
 	void StopAllCorotine(FName ObjectName);
 
+	// 开始一个延时方法，返回true说明成功，返回false说明已经存在
+	bool StartInvoke(FName ObjectName, FName InvokeName, DDInvokeTask* InvokeTask);
+	// 停止一个延时
+	bool StopInvoke(FName ObjectName, FName InvokeName);
+	// 停止某一个对象下的所有延时方法
+	void StopAllInvoke(FName ObjectName);
+	
 public:
 
 	TArray<UDDModule*> ChildrenModule;

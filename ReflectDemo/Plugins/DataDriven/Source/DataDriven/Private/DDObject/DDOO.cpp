@@ -231,3 +231,17 @@ void IDDOO::StopAllCorotine()
 {
 	return IModule->StopAllCorotine(GetObjectName());
 }
+
+
+
+
+bool IDDOO::StopInvoke(FName InVokeName)
+{
+	return IModule->StopInvoke(GetObjectName(), InVokeName);
+}
+
+void IDDOO::StopAllInvoke()
+{
+	IModule->StopAllInvoke(GetObjectName());
+}
+

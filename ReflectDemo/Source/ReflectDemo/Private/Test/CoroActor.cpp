@@ -18,7 +18,9 @@ void ACoroActor::DDEnable()
 
 	//TempStartCoroutine(CoroTestTwo());
 
-	DDH::Debug(10) << "StartCoroutine --> " << StartCoroutine("CoroTest", CoroTestThree()) << DDH::Endl();
+	// DDH::Debug(10) << "StartCoroutine --> " << StartCoroutine("CoroTest", CoroTestThree()) << DDH::Endl();
+	
+	InvokeRepeat("EchoInfo", 3.f, 2.f, this, &ACoroActor::EchoCoroInfo);
 }
 
 void ACoroActor::DDTick(float DeltaSeconds)

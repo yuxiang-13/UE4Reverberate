@@ -18,7 +18,8 @@ void ACoroActor::DDEnable()
 
 	//TempStartCoroutine(CoroTestTwo());
 	
-	DDStartCoroutine(CoroTestThree());
+	// DDStartCoroutine(CoroTestThree());
+	
 }
 
 void ACoroActor::DDTick(float DeltaSeconds)
@@ -149,9 +150,6 @@ DDCoroTask* ACoroActor::CoroTestThree()
 	//协程方法主体开始
 #include DDCORO_BEGIN()
 
-
-
-
 	DDH::Debug(10) << 0 << DDH::Endl();
 
 #include DDYIELD_READY()
@@ -195,13 +193,11 @@ DDCoroTask* ACoroActor::CoroTestThree()
 
 	DDH::Debug(10) << 4 << DDH::Endl();
 
-
-
-
-
 	//协程方法主体结束
 #include DDCORO_END()
 }
+
+
 
 DDCoroTask* ACoroActor::CoroFunc()
 {

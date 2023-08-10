@@ -276,4 +276,19 @@ void IDDOO::ExecuteFunction(DDObjectAgreement Agreement, DDParam* Param)
 		// 查找对应模组的方法
 		IDriver->ExecuteFunction(Agreement, Param);
 	}
+}
+
+bool IDDOO::StartCoroution(FName CoroName, DDCoroTask* CoroTask)
+{
+	return IModule->StartCoroution(GetObjectName(), CoroName, CoroTask);
+}
+
+bool IDDOO::StopCoroution(FName CoroName)
+{
+	return IModule->StopCoroution(GetObjectName(), CoroName);
+}
+
+void IDDOO::StopAllCorotion()
+{
+	return IModule->StopAllCorotion(GetObjectName());
 };

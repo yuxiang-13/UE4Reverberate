@@ -15,6 +15,3 @@ void UDDMessage::MessageInit()
 void UDDMessage::MessageBeginPlay()
 {
 }
-void UDDMessage::MessageTick(float DeltaSeconds)
-{
-}

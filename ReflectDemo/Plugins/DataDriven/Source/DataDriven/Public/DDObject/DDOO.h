@@ -72,8 +72,6 @@ public:
 	// 销毁自己
 	void DDDestroy();
 
-
-	
 public:
 	//是否允许帧运行,如果要允许帧运行需要在构造函数或者BeginPlay设置,在UE4里默认为false
 	bool IsAllowTickEvent;
@@ -98,6 +96,13 @@ protected:
 	// 特殊在，需要传 模组ID， 来确定指定要注册方法到指定模组下的 事件节点
 	template<typename RetType, typename... VarTypes>
 	DDFunHandle RegisterFunPort(int32 ModuleID, FName CallName, TFunction<RetType(VarTypes...)> InsFun);
+
+	// 开始一个协程，返回true表示开启成功，false表示已经投同对象名同协程任务名，的协程
+	bool StartCoroution(FName CoroName, DDCoroTask* CoroTask);
+	// 停止一个协程,返回true表示停止成功，返回false表示携程不存在了
+	bool StopCoroution(FName CoroName);
+	// 停止所有的协程
+	void StopAllCorotion();
 protected:
 	// 保存自身UObject
 	UObject* IBody;

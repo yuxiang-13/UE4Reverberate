@@ -143,6 +143,21 @@ void UDDModule::ExecuteFunction(DDObjectAgreement Agreement, DDParam* Param)
 	}
 }
 
+bool UDDModule::StartCoroution(FName ObjectName, FName CoroName, DDCoroTask* CoroTask)
+{
+	return Message->StartCoroution(ObjectName, CoroName, CoroTask);
+}
+
+bool UDDModule::StopCoroution(FName ObjectName, FName CoroName)
+{
+	return Message->StopCoroution(ObjectName, CoroName);
+}
+
+void UDDModule::StopAllCorotion(FName ObjectName)
+{
+	return Message->StopAllCorotion(ObjectName);
+}
+
 void UDDModule::ExecuteSelfObject(DDObjectAgreement Agreement, DDParam* Param)
 {
 	// 定义存储目标对象的组

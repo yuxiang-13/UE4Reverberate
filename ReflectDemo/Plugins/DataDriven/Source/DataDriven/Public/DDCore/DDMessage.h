@@ -27,9 +27,19 @@ public:
 	// 注册方法接口
 	template<typename RetType, typename... VarTypes>
 	DDFunHandle RegisterFunPort(FName CallName, TFunction<RetType(VarTypes...)> InsFun);
+
+	// 开始一个协程，返回true表示开启成功，false表示已经投同对象名同协程任务名，的协程
+	bool StartCoroution(FName ObjectName, FName CoroName, DDCoroTask* CoroTask);
+	// 停止一个协程,返回true表示停止成功，返回false表示携程不存在了
+	bool StopCoroution(FName ObjectName, FName CoroName);
+	// 停止所有的协程
+	void StopAllCorotion(FName ObjectName);
 protected:
 	// 事件队列
 	DDMsgQuene* MsgQuene;
+
+	// 协程序列 Key=>对象名  Value的Key=>协程任务的名字
+	TMap<FName, TMap<FName, DDCoroTask*>> CoroStack;
 };
 
 template <typename RetType, typename ... VarTypes>

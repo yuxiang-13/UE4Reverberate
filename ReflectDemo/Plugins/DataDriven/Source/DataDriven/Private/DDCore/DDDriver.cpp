@@ -58,7 +58,7 @@ void ADDDriver::RegisterGamePlay()
 	APlayerController* PlayerController = UGameplayStatics::GetPlayerController(GetWorld(), 0);
 	if (!PlayerController)
 	{
-		DDH::Debug(10) << "No PlayerController  " << DDH::Endl();
+		//DDH::Debug(10) << "No PlayerController  " << DDH::Endl();
 	} else
 	{
 		UDDCommon::Get()->InitController(PlayerController);

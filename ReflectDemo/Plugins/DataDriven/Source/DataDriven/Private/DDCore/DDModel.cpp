@@ -37,7 +37,7 @@ void UDDModel::RegisterObject(IDDOO* ObjectInst)
 		
 	} else {
 		// 有重复注册，就打印
-		DDH::Debug(10) << " Object Repeated ---> " << ObjectInst->GetObjectName() << DDH::Endl();
+		//DDH::Debug(10) << " Object Repeated ---> " << ObjectInst->GetObjectName() << DDH::Endl();
 	}
 }
 

@@ -1747,6 +1747,71 @@ class DATADRIVEN_API UDDDefine : public UObject
 	}
 
 
+//参数区域宏定义
+#define DDCORO_PARAM(UserClass); \
+struct DGCoroTask : public DDCoroTask \
+{ \
+UserClass* D; \
+DGCoroTask(UserClass* Data, int32 CoroCount) : DDCoroTask(CoroCount) { D = Data; }
+
+
+//Work方法开头
+#define DDCORO_WORK_START \
+virtual void Work(float DeltaTime) override \
+{ \
+goto DDCORO_LABEL_PICKER; \
+DDCORO_LABEL_START:
 
 
 
+//Work方法中间
+#define  DDCORO_WORK_MIDDLE \
+goto DDCORO_LABEL_END; \
+DDCORO_LABEL_PICKER:
+
+
+//Work方法结尾
+#define  DDCORO_WORK_END \
+goto DDCORO_LABEL_START; \
+DDCORO_LABEL_END: \
+; \
+} \
+}; \
+return new DGCoroTask(this, DDYIELD_COUNT);
+
+
+#define DDCORO_BEGIN() "DataDriven/Public/DDCommon/DDCoroBegin.h"
+
+#define DDCORO_END() "DataDriven/Public/DDCommon/DDCoroEnd.h"
+
+#define DDYIELD_READY() "DataDriven/Public/DDCommon/DDYieldReady.h"
+
+
+#define DDYIELD_RETURN_TICK(Tick); \
+if (CoroStack[DDYIELD_COUNT]->UpdateOperate(Tick)) \
+goto DDCORO_LABEL_END;
+
+
+#define DDYIELD_RETURN_SECOND(Time); \
+if (CoroStack[DDYIELD_COUNT]->UpdateOperate(DeltaTime, Time)) \
+goto DDCORO_LABEL_END;
+
+
+#define  DDYIELD_RETURN_BOOL(Param); \
+if (CoroStack[DDYIELD_COUNT]->UpdateOperate(Param)) \
+goto DDCORO_LABEL_END;
+
+
+#define DDYIELD_RETURN_FUNC(UserClass, UserFunc); \
+if (CoroStack[DDYIELD_COUNT]->UpdateOperate(UserClass, UserFunc)) \
+goto DDCORO_LABEL_END;
+
+
+#define DDYIELD_RETURN_LAMB(Expression); \
+if (CoroStack[DDYIELD_COUNT]->UpdateOperate([this](){ return Expression; })) \
+goto DDCORO_LABEL_END;
+
+
+#define DDYIELD_RETURN_STOP(); \
+if (CoroStack[DDYIELD_COUNT]->UpdateOperate()) \
+goto DDCORO_LABEL_END;

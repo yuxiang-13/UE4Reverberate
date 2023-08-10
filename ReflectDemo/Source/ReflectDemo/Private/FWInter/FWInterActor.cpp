@@ -16,13 +16,13 @@ AFWInterActor::AFWInterActor()
 void AFWInterActor::FWFunOne_Implementation(const FString& HitResult)
 {
 	IFWInterface::FWFunOne_Implementation(HitResult);
-	FWHelper::Debug(FString("- - - >>>    FWFunOne_Implementation"), 10.f);
+	//FWHelper::Debug(FString("- - - >>>    FWFunOne_Implementation"), 10.f);
 }
 
 void AFWInterActor::FWFunThree_Implementation(const FString& HitResult)
 {
 	IFWInterface::FWFunThree_Implementation(HitResult);
-	FWHelper::Debug(FString("- - - >>>    FWFunThree_Implementation"), 10.f);
+	//FWHelper::Debug(FString("- - - >>>    FWFunThree_Implementation"), 10.f);
 }
 
 // Called when the game starts or when spawned

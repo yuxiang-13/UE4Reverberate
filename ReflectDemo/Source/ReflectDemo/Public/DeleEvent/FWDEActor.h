@@ -102,10 +102,10 @@ public:
 		
 		if (returnResult)
 		{
-			FWHelper::Debug(FString("- - - >>> RegFunFive_ASelf_Params 函数 返回真 真 真 "), 10.f);
+			//FWHelper::Debug(FString("- - - >>> RegFunFive_ASelf_Params 函数 返回真 真 真 "), 10.f);
 		} else
 		{
-			FWHelper::Debug(FString("- - - >>> RegFunFive_ASelf_Params 函数 返回假 假 假 "), 10.f);
+			//FWHelper::Debug(FString("- - - >>> RegFunFive_ASelf_Params 函数 返回假 假 假 "), 10.f);
 		}
 	}
 public:

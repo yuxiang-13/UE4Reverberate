@@ -51,7 +51,7 @@ void AWealthActor::WealthState()
 	UStaticMesh* BlockMesh = FindObject<UStaticMesh>(NULL, TEXT("StaticMesh'/Game/Resource/SCTanks/Meshes/SK_SCT_Block.SK_SCT_Block'"));
 	if (!BlockMesh) FWHelper::Debug("FindObject BlockMesh Failed");
 
-	FWHelper::Debug("Loading Object BlockMesh");
+	//FWHelper::Debug("Loading Object BlockMesh");
 	LoadObject<UStaticMesh>(NULL, TEXT("StaticMesh'/Game/Resource/SCTanks/Meshes/SK_SCT_Block.SK_SCT_Block'"));
 	
 	BlockMesh = FindObject<UStaticMesh>(NULL, TEXT("StaticMesh'/Game/Resource/SCTanks/Meshes/SK_SCT_Block.SK_SCT_Block'"));

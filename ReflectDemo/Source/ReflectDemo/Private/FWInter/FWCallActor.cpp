@@ -17,7 +17,7 @@ AFWCallActor::AFWCallActor()
 
 void AFWCallActor::FWCallFun()
 {
-	FWHelper::Debug(FString("- - - >>>    FWCallFun"), 10.f);
+	//FWHelper::Debug(FString("- - - >>>    FWCallFun"), 10.f);
 }
 
 // Called when the game starts or when spawned

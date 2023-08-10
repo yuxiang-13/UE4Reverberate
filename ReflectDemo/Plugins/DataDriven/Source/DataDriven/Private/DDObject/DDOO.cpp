@@ -41,20 +41,20 @@ void IDDOO::RegisterToModule(FName ModName, FName ObjName, FName ClsName)
 		ModuleIndex = DDH::GetEnumIndexFromName(IDriver->ModuleType.ToString(), ModName);
 		if (ModuleIndex < 0)
 		{
-			DDH::Debug(10) << GetObjectName() << "Get " << ModName << "  ModuleIndex   Failed!" << DDH::Endl();
+			// DDH::Debug(10) << GetObjectName() << "Get " << ModName << "  ModuleIndex   Failed!" << DDH::Endl();
 			return;
 		} else
 		{
 			// 开始把资源进行注册
 			if (!IDriver->RegisterToModule(this))
 			{
-				DDH::Debug(10) << GetObjectName() << "Register to " << ModName << "  ModuleIndex   Failed!" << DDH::Endl();
+				// // DDH::Debug(10) << GetObjectName() << "Register to " << ModName << "  ModuleIndex   Failed!" << DDH::Endl();
 			}
 		}
 	} else
 	{
 		// DDriver不存在
-		DDH::Debug(10) << GetObjectName() << "Get " << ModName << "  ModuleIndex   Failed!" << DDH::Endl();
+		// DDH::Debug(10) << GetObjectName() << "Get " << ModName << "  ModuleIndex   Failed!" << DDH::Endl();
 	}
 }
 
@@ -87,20 +87,20 @@ void IDDOO::RegisterToModule(int32 ModIndex, FName ObjName, FName ClsName)
 		ModuleIndex = ModIndex;
 		if (ModuleIndex < 0)
 		{
-			DDH::Debug(10) << GetObjectName() << "Get ModuleIndex  " << ModuleIndex << "  ModuleIndex   Failed!" << DDH::Endl();
+			// DDH::Debug(10) << GetObjectName() << "Get ModuleIndex  " << ModuleIndex << "  ModuleIndex   Failed!" << DDH::Endl();
 			return;
 		} else
 		{
 			// 开始把资源进行注册
 			if (!IDriver->RegisterToModule(this))
 			{
-				DDH::Debug(10) << GetObjectName() << "Register to ModuleIndex  " << ModuleIndex << "  ModuleIndex   Failed!" << DDH::Endl();
+				// DDH::Debug(10) << GetObjectName() << "Register to ModuleIndex  " << ModuleIndex << "  ModuleIndex   Failed!" << DDH::Endl();
 			}
 		}
 	} else
 	{
 		// DDriver不存在
-		DDH::Debug(10) << GetObjectName() << "Get ModuleIndex " << ModuleIndex << "  ModuleIndex   Failed!" << DDH::Endl();
+		// DDH::Debug(10) << GetObjectName() << "Get ModuleIndex " << ModuleIndex << "  ModuleIndex   Failed!" << DDH::Endl();
 	}
 }
 

@@ -19,7 +19,7 @@ void AFWCharacter::CAFuncOne(int32 Input, bool& Output)
 
 void AFWCharacter::CAFuncFour(FString Info, int32 Count)
 {
-	FWHelper::Debug(Info + FString(" - -- - ") + FString::FromInt(Count), 120.f);
+	//FWHelper::Debug(Info + FString(" - -- - ") + FString::FromInt(Count), 120.f);
 }
 
 
@@ -31,7 +31,7 @@ void AFWCharacter::PostEditChangeChainProperty(FPropertyChangedChainEvent& Prope
 	// 2 GET_MEMBER_NAME_CHECKED 查找类下成员变量
 	if (PropertyChangedEvent.Property && PropertyChangedEvent.Property->GetFName() == GET_MEMBER_NAME_CHECKED(AFWCharacter, CAFive))
 	{
-		FWHelper::Debug(FString(" - -- - ") + PropertyChangedEvent.Property->GetFName().ToString(), 120.f);
+		//FWHelper::Debug(FString(" - -- - ") + PropertyChangedEvent.Property->GetFName().ToString(), 120.f);
 	}
 }
 #endif

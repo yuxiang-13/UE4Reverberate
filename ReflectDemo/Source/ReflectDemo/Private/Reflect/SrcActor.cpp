@@ -18,24 +18,24 @@ ASrcActor::ASrcActor()
 
 void ASrcActor::UFuncOne()
 {
-	FWHelper::Debug(FString("ASrcActor --->>> UFuncOne  "), 10.f);
+	// FWHelper::Debug(FString("ASrcActor --->>> UFuncOne  "), 10.f);
 }
 
 void ASrcActor::UFuncTwo(FString InfoStr, int32& Count)
 {
-	FWHelper::Debug(InfoStr + FString("ASrcActor --->>> UFuncTwo  ") + FString::FromInt(Count), 10.f);
+	// FWHelper::Debug(InfoStr + FString("ASrcActor --->>> UFuncTwo  ") + FString::FromInt(Count), 10.f);
 	Count = 100;
 }
 
 bool ASrcActor::UFuncThree(FString InfoStr, int32 Count)
 {
-	FWHelper::Debug(InfoStr + FString("ASrcActor --->>> UFuncThree  ") + FString::FromInt(Count), 10.f);
+	// FWHelper::Debug(InfoStr + FString("ASrcActor --->>> UFuncThree  ") + FString::FromInt(Count), 10.f);
 	return true;
 }
 
 int32 ASrcActor::UFuncFour(FString InfoStr, int32& Count)
 {
-	FWHelper::Debug(InfoStr + FString("ASrcActor --->>> UFuncFour  ") + FString::FromInt(Count), 10.f);
+	// FWHelper::Debug(InfoStr + FString("ASrcActor --->>> UFuncFour  ") + FString::FromInt(Count), 10.f);
 	Count = 1000;
 
 	return 2000;

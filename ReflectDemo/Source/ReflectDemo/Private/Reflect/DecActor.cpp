@@ -76,7 +76,7 @@ void ADecActor::RunUFuncTwo()
 	bool DelResult = FunDelegateThree.Execute(FString("ASrcActor ----->  UFunctionThree "), 789);
 	if (DelResult)
 	{
-		FWHelper::Debug(FString("-  Return True "), 10.f);
+		//FWHelper::Debug(FString("-  Return True "), 10.f);
 	}
 
 }
@@ -106,8 +106,8 @@ void ADecActor::RunUFuncThree()
 		// 地址强转
 		int32* RetVal = (int32*)RetValPtr;
 		
-		FWHelper::Debug(FString("-  Return value ---> ") + FString::FromInt(*RetVal), 10.f);
-		FWHelper::Debug(FString("-  count True ---> ") + FString::FromInt(FuncTwoParams.Count), 10.f);
+		//FWHelper::Debug(FString("-  Return value ---> ") + FString::FromInt(*RetVal), 10.f);
+		//FWHelper::Debug(FString("-  count True ---> ") + FString::FromInt(FuncTwoParams.Count), 10.f);
 	}
 	
 }

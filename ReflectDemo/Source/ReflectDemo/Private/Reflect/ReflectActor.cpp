@@ -55,7 +55,7 @@ void AReflectActor::DDTick(float DeltaSeconds)
 	Super::DDTick(DeltaSeconds);
 
 	// 接口调用，传参 TimeCounter
-	DDH::Debug(0.f) << GetObjectName() << " - - -AcceptCall ->" << RegCallHandle.Execute(FString::FromInt(TimeCounter++)) << DDH::Endl();
+	//DDH::Debug(0.f) << GetObjectName() << " - - -AcceptCall ->" << RegCallHandle.Execute(FString::FromInt(TimeCounter++)) << DDH::Endl();
 
 	// 测试注销
 	// if (TimeCounter == 450)
@@ -66,16 +66,16 @@ void AReflectActor::DDTick(float DeltaSeconds)
 
 void AReflectActor::AcceptCall(FString InfiStr)
 {
-	DDH::Debug(10) << GetObjectName() << " - - -AcceptCall ->" << InfiStr << DDH::Endl();
+	//DDH::Debug(10) << GetObjectName() << " - - -AcceptCall ->" << InfiStr << DDH::Endl();
 }
 
 void AReflectActor::WealthCall(int32 Counter, FString InfoStr, bool InFlag)
 {
-	DDH::Debug(10) << GetObjectName() << " - - -WealthCall ->" << DDH::Endl();
+	// DDH::Debug(10) << GetObjectName() << " - - -WealthCall ->" << DDH::Endl();
 }
 
 int32 AReflectActor::WealthCall111(int32 Counter, FString InfoStr, bool InFlag)
 {
-	DDH::Debug(10) << " WealthCall111 - - - ->" << DDH::Endl();
+	// DDH::Debug(10) << " WealthCall111 - - - ->" << DDH::Endl();
 	return 7823;
 }

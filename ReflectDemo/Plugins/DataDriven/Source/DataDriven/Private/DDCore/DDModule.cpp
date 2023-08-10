@@ -64,7 +64,7 @@ void UDDModule::ChangeModuleType(FName ModuleType)
 
 	if (ModuleIndex < 0)
 	{
-		DDH::Debug(10) << "生成模具错误----" << GetName() << DDH::Endl();
+		//DDH::Debug(10) << "生成模具错误----" << GetName() << DDH::Endl();
 	}
 }
 

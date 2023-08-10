@@ -35,7 +35,7 @@ void ALifeCallActor::DDRegister()
 
 int32 ALifeCallActor::RegTest(FString InfoStr)
 {
-	DDH::Debug(0.f) << GetObjectName() << " RegFun- - - -> get Reg Call =" << InfoStr << DDH::Endl();
+	// DDH::Debug(0.f) << GetObjectName() << " RegFun- - - -> get Reg Call =" << InfoStr << DDH::Endl();
 	return 123;
 }
 
@@ -105,5 +105,5 @@ void ALifeCallActor::DDRelease()
 
 void ALifeCallActor::AcceptCall(FString InfiStr)
 {
-	DDH::Debug(10) << GetObjectName() << " - - - ->" << InfiStr << DDH::Endl();
+	// DDH::Debug(10) << GetObjectName() << " - - - ->" << InfiStr << DDH::Endl();
 }

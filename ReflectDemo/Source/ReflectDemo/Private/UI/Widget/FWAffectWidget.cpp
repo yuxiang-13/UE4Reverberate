@@ -44,7 +44,7 @@ bool UFWAffectWidget::Initialize()
 
 void UFWAffectWidget::ButtonOneEvent()
 {
-	FWHelper::Debug("ButtonOneEvent 111", 10.f);
+	//FWHelper::Debug("ButtonOneEvent 111", 10.f);
 	// LoadObject 同步
 	UTexture2D* Tartex = LoadObject<UTexture2D>(NULL, TEXT("/Script/Engine.Texture2D'/Game/Resource/UI/Texture/MenuTex/book.book'"));
 	BGImage->SetBrushFromTexture(Tartex);
@@ -53,7 +53,7 @@ void UFWAffectWidget::ButtonOneEvent()
 
 void UFWAffectWidget::ButtonTwoEvent()
 {
-	FWHelper::Debug("ButtonTwoEvent 222", 10.f);
+	//FWHelper::Debug("ButtonTwoEvent 222", 10.f);
 	// 如果动态Image已经存在，直接返回
 	if (DynImage) return;
 
@@ -71,7 +71,7 @@ void UFWAffectWidget::ButtonTwoEvent()
 // 销毁 按钮2 创建的新插槽
 void UFWAffectWidget::ButtonThreeEvent()
 {
-	FWHelper::Debug("ButtonThreeEvent 333", 10.f);
+	//FWHelper::Debug("ButtonThreeEvent 333", 10.f);
 	
 	// 如果动态Image已经存在，直接返回
 	if (!DynImage) return;

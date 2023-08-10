@@ -124,17 +124,17 @@ void AFWReceActor::BeginPlay()
 
 void AFWReceActor::EchoInfoOne(FString InfoStr)
 {
-	FWHelper::Debug(FString("- - - >>> B 函数 ") + InfoStr, 10.f);
+	//FWHelper::Debug(FString("- - - >>> B 函数 ") + InfoStr, 10.f);
 }
 
 void AFWReceActor::EchoInfoTwo(int32 Count, FString InfoStr)
 {
-	FWHelper::Debug(FString("- - - >>> B ") + InfoStr + FString("- -- -Count = ") + FString::FromInt(Count), 10.f);
+	//FWHelper::Debug(FString("- - - >>> B ") + InfoStr + FString("- -- -Count = ") + FString::FromInt(Count), 10.f);
 }
 
 bool AFWReceActor::EchoInfoThree(FString InfoStr, int32 Count)
 {
-	FWHelper::Debug(InfoStr + FString(" --> ") + FString::FromInt(Count), 500.f);
+	//FWHelper::Debug(InfoStr + FString(" --> ") + FString::FromInt(Count), 500.f);
 	return true;
 }
 

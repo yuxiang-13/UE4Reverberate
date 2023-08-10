@@ -10,7 +10,7 @@
 
 void UFWGameInstance::GIEcho(FString Info, int32 Count)
 {
-	FWHelper::Debug(Info + FString(" - -- - ") + FString::FromInt(Count), 120.f);
+	//FWHelper::Debug(Info + FString(" - -- - ") + FString::FromInt(Count), 120.f);
 }
 
 bool UFWGameInstance::ProcessConsoleExec(const TCHAR* Cmd, FOutputDevice& Ar, UObject* Executor)

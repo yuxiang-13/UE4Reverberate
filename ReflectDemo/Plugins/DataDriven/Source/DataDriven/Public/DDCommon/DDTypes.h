@@ -549,7 +549,6 @@ DDCallHandle<RetType, Vartypes...> DDMsgQuene::RegisterCallPort(FName CallName)
 	return DDCallHandle<RetType, Vartypes...>(this, CallName);
 }
 
-
 template<typename RetType, typename... VarTypes>
 DDFunHandle DDMsgQuene::RegisterFunPort(FName CallName, TFunction<RetType(VarTypes...)> InsFun)
 {
@@ -564,7 +563,8 @@ DDFunHandle DDMsgQuene::RegisterFunPort(FName CallName, TFunction<RetType(VarTyp
 	//直接将新的方法注册到节点
 	FunID = MsgQuene.Find(CallName)->RegisterFun(InsFun);
 	//返回方法句柄
-	return DDFunHandle(this, CallName, FunID);
+	DDFunHandle handle = DDFunHandle(this, CallName, FunID);;
+	return handle;
 }
 
 template <typename RetType, typename ... VarTypes>
@@ -628,3 +628,185 @@ public:
 
 
 
+
+#pragma region Coroutine
+
+
+// 判断条件委托
+DECLARE_DELEGATE_RetVal(bool, FCoroCondition)
+
+// 协程节点
+struct DDCoroNode
+{
+	// 激活状态
+	bool IsActive;
+	// 剩余时间 或者 剩余帧
+	float RemainTime;
+	// 条件委托
+	FCoroCondition ConditionDel;
+	
+	// 构造函数
+	DDCoroNode() : IsActive(false) {};
+
+	// 延迟多少帧 继续进行
+	bool UpdateOperate(int32 SpaceTick)
+	{
+		if (!IsActive)
+		{
+			RemainTime = SpaceTick;
+			IsActive = true;
+			return true;
+		} else
+		{
+			RemainTime -= 1;
+			if (RemainTime > 0)
+			{
+				return true;
+			} else
+			{
+				IsActive = false;
+				return false;
+			}
+		}
+	}
+	
+	// 延迟多少秒 帧更新函数 (参数-> 间隔，需要暂停的时间)  返回true就继续挂起，返回false就执行后续代码
+	bool UpdateOperate(float DeltaTime, float SpaceTime)
+	{
+		if (!IsActive)
+		{
+			RemainTime = SpaceTime;
+			IsActive = true;
+			return true;
+		} else
+		{
+			RemainTime -= DeltaTime;
+			if (RemainTime > 0)
+			{
+				return true;
+			} else
+			{
+				IsActive = false;
+				return false;
+			}
+		}
+	}
+
+	// bool变量指针挂起，变量为true继续挂起，为false执行后续
+	bool UpdateOperate(bool * Condition)
+	{
+		if (!IsActive)
+		{
+			IsActive = true;
+			return true;
+		} else
+		{
+			if (*Condition)
+			{
+				return true;
+			} else
+			{
+				IsActive = false;
+				return false; // 设置失活状态
+			}
+		}
+	};
+
+	// 委托函数 挂起，知道函数返回false才失活执行后续代码
+	template<typename UserClass>
+	bool UpdateOperate(UserClass* UserObj, typename FCoroCondition::TUObjectMethodDelegate<UserClass>::FMethodPtr InMethod)
+	{
+		if (!IsActive)
+		{
+			// 是否已经有绑定函数
+			if (!ConditionDel.IsBound())
+			{
+				ConditionDel.BindUObject(UserObj, InMethod);
+			}
+			IsActive = true;
+			return true;
+		} else
+		{
+			if (ConditionDel.Execute())
+			{
+				return true; // 还是激活状态
+			} else
+			{
+				IsActive = false;
+				return false; // 设置失活状态
+			}
+		}
+	}
+
+	// Lambuda表达式挂起
+	bool UpdateOperate(TFunction<bool()> InFunction)
+	{
+		if (!IsActive)
+		{
+			IsActive = true;
+			return true;
+		} else
+		{
+			if (InFunction())
+			{
+				return true;
+			} else
+			{
+				IsActive = false;
+				return false; // 设置失活状态
+			}
+		}
+	};
+
+	// 停止协程
+	bool UpdateOperate()
+	{
+		IsActive = false; // 设置失活状态
+		return true; // 返回true马上跳转到 函数结尾
+	}
+};
+
+// 是不是结束协程节点
+struct DDCoroTask
+{
+public:
+	// 多个协程节点
+	TArray<DDCoroNode*> CoroStack;
+public:
+	// 构造
+	DDCoroTask(int32 CoroCount)
+	{
+		for (int i= 0; i <= CoroCount; ++i)
+		{
+			CoroStack.Push(new DDCoroNode());
+		}
+	}
+	// 析构
+	virtual ~DDCoroTask()
+	{
+		for (int i= CoroStack.Num() - 1; i >= 0; --i)
+		{
+			delete CoroStack[i];
+		}
+	}
+	// 实际运行的帧函数
+	virtual void Work(float DeltaTime) {};
+	// 是否完结状态
+	bool IsFinish()
+	{
+		bool Flag = true;
+		for (int i= 0; i < CoroStack.Num(); ++i)
+		{
+			// 循环所有 协程节点，只要有一个再激活状态（还在挂起），那就还不能运行
+			if (CoroStack[i]->IsActive)
+			{
+				Flag = false;
+				break;
+			}
+		}
+
+		return Flag;
+	}
+};
+
+#pragma endregion

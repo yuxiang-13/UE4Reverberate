@@ -8,6 +8,7 @@
 #include "UObject/Interface.h"
 #include "DDOO.generated.h"
 
+// This class does not need to be modified.
 UINTERFACE(MinimalAPI)
 class UDDOO : public UInterface
 {
@@ -15,43 +16,45 @@ class UDDOO : public UInterface
 };
 
 /**
- * 
+ *
  */
 class DATADRIVEN_API IDDOO
 {
 	GENERATED_BODY()
 
+		// Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
-	// 对象 注册到框架
-	void RegisterToModule(FName ModName, FName ObjName = FName(), FName ClsName = FName());
-	// 同上，只传入模组Index
-	void RegisterToModule(int32 ModIndex, FName ObjName = FName(), FName ClsName = FName());
-	
 
-	// 获取对象名
+	//注册到框架
+	void RegisterToModule(FName ModName, FName ObjName = FName(), FName ClsName = FName());
+
+	//同上, 只转入模组Index
+	void RegisterToModule(int32 ModIndex, FName ObjName = FName(), FName ClsName = FName());
+
+	//获取对象名
 	FName GetObjectName();
-	
-	// 获取类名
+
+	//获取类名
 	FName GetClassName();
 
-	// 获取模组Index
+	//获取模组Index
 	int32 GetModuleIndex() const;
 
-	// 获取Object主体
+	//获取Obejct主体
 	UObject* GetObjectBody() const;
 
-	// 框架获取世界函数(因为某一些类中 通过原始获取世界的方法，会获取不到  -->> Actor类是 放到世界的，所以可以获取世界，继承自Uobject的类，不会放到世界，就获取不到世界)
+	//框架获取世界函数
 	UWorld* GetDDWorld() const;
 
-	// 从外部指定模组
+	//从外部指定模组
 	void AssignModule(UDDModule* Mod);
 
-	
-	// 激活生命周期函数，激活成功返回true
+	//激活生命周期, 激活成功后返回true, 停止调用
 	bool ActiveLife();
-	// 停止生命周期函数，销毁成功返回true，从数据模块注销
+
+	//销毁生命周期函数, 销毁成功后返回true, 从数据模块注销
 	bool DestroyLife();
-	
+
 	//生命周期,由模组管理器调用
 	virtual void DDInit();//初始化
 	virtual void DDLoading();//加载绑定的资源
@@ -65,77 +68,88 @@ public:
 	virtual void DDUnLoading();//销毁绑定资源
 	virtual void DDRelease();//释放自己
 
-	// 激活对象
+	//激活对象
 	virtual void OnEnable();
-	// 失活对象方法
+
+	//失活对象
 	virtual void OnDisable();
-	// 销毁自己
+
+	//销毁自己
 	void DDDestroy();
 
+
+
+
+
 public:
+
 	//是否允许帧运行,如果要允许帧运行需要在构造函数或者BeginPlay设置,在UE4里默认为false
 	bool IsAllowTickEvent;
-	
+
 	//生命周期状态
 	EBaseObjectLife LifeState;
 
 	//生命运行状态
 	EBaseObjectState RunState;
-	
+
 protected:
-	// 执行反射方法
+
+	//执行反射方法
 	void ExecuteFunction(DDModuleAgreement Agreement, DDParam* Param);
-	
-	// 执行反射方法
+
+	//执行反射方法
 	void ExecuteFunction(DDObjectAgreement Agreement, DDParam* Param);
-	
-	// 注册调用接口
-	template<typename RetType, typename ... VarTypes>
-	DDCallHandle<RetType, VarTypes ...> RegisterCallPort(FName CallName);
-	// 注册方法接口
-	// 特殊在，需要传 模组ID， 来确定指定要注册方法到指定模组下的 事件节点
+
+	//注册调用接口
+	template<typename RetType, typename... VarTypes>
+	DDCallHandle<RetType, VarTypes...> RegisterCallPort(FName CallName);
+
+	//注册方法接口
 	template<typename RetType, typename... VarTypes>
 	DDFunHandle RegisterFunPort(int32 ModuleID, FName CallName, TFunction<RetType(VarTypes...)> InsFun);
 
-	// 开始一个协程，返回true表示开启成功，false表示已经投同对象名同协程任务名，的协程
-	bool StartCoroution(FName CoroName, DDCoroTask* CoroTask);
-	// 停止一个协程,返回true表示停止成功，返回false表示携程不存在了
-	bool StopCoroution(FName CoroName);
-	// 停止所有的协程
-	void StopAllCorotion();
+	//开启一个协程, 返回true说明开启成功, 返回false说明已经有同对象名同协程任务名的协程存在
+	bool StartCoroutine(FName CoroName, DDCoroTask* CoroTask);
+
+	//停止一个协程, 返回true说明停止协程成功, 返回false说明协程早已经停止
+	bool StopCoroutine(FName CoroName);
+
+	//停止该对象的所有协程
+	void StopAllCorotine();
+
 protected:
-	// 保存自身UObject
+
+	//保存自身的UObject
 	UObject* IBody;
 
-	// 保存模组
+	//保存对应的模组
 	UDDModule* IModule;
 
-	// 保存驱动器
+	//保存驱动器
 	ADDDriver* IDriver;
 
-	// 对象名字
+	//对象名字
 	FName IObjectName;
 
-	// 对象类名字
+	//对象类名字
 	FName IClassName;
 
-	// 对应模组的序号
+	//对应模组的序号
 	int32 ModuleIndex;
+
+
 };
 
-// 注册到此对象自身所在模组下的 Message消息模块下
-template <typename RetType, typename ... VarTypes>
-DDCallHandle<RetType, VarTypes...> IDDOO::RegisterCallPort(FName CallName)
+template<typename RetType, typename... VarTypes>
+DDCallHandle<RetType, VarTypes...>
+IDDOO::RegisterCallPort(FName CallName)
 {
-	// 本模组下的方法
 	return IModule->RegisterCallPort<RetType, VarTypes...>(CallName);
 }
 
-// 特殊在，需要传 模组ID， 来确定指定要注册方法到指定模组下的 事件节点
-template <typename RetType, typename ... VarTypes>
+template<typename RetType, typename... VarTypes>
 DDFunHandle IDDOO::RegisterFunPort(int32 ModuleID, FName CallName, TFunction<RetType(VarTypes...)> InsFun)
 {
-	// 是本模组
 	if (ModuleIndex == ModuleID)
 		return IModule->RegisterFunPort<RetType, VarTypes...>(CallName, InsFun);
 	else

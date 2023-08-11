@@ -182,7 +182,13 @@ void IDDOO::DDUnRegister() {}
 
 void IDDOO::DDUnLoading() {}
 
-void IDDOO::DDRelease() {}
+void IDDOO::DDRelease()
+{
+	// 注销所有协程，延迟，按键事件
+	StopAllCorotine();
+	StopAllInvoke();
+	UnBindInput();
+}
 
 void IDDOO::OnEnable()
 {
@@ -243,5 +249,12 @@ bool IDDOO::StopInvoke(FName InVokeName)
 void IDDOO::StopAllInvoke()
 {
 	IModule->StopAllInvoke(GetObjectName());
+}
+
+
+
+void IDDOO::UnBindInput()
+{
+	IModule->UnBindInput(GetObjectName());
 }
 

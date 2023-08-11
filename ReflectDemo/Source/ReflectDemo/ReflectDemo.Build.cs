@@ -19,5 +19,10 @@ public class ReflectDemo : ModuleRules
 			 "UMG",
 			 "DataDriven"
 		});
+		PrivateDependencyModuleNames.AddRange(new string[]
+		{
+			"Slate", 
+			"SlateCore", 
+		});
 	}
 }

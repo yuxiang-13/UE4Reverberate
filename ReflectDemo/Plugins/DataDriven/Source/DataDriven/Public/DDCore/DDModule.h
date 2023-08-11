@@ -83,7 +83,31 @@ public:
 	bool StopInvoke(FName ObjectName, FName InvokeName);
 	// 停止某一个对象下的所有延时方法
 	void StopAllInvoke(FName ObjectName);
+
 	
+	// 绑定Axis按键事件 InputAxis
+	template<class UserClass>
+	FInputAxisBinding& DDBindAxis(UserClass* UserObj, typename FInputAxisHandlerSignature::TUObjectMethodDelegate<UserClass>::FMethodPtr InMethod, const FName AxisName_1);
+
+	// 绑定触摸事件 InputTouch
+	template<class UserClass>
+	FInputTouchBinding& DDBindTouch(UserClass* UserObj, typename FInputTouchHandlerSignature::TUObjectMethodDelegate<UserClass>::FMethodPtr InMethod, const EInputEvent KetEvent);
+
+	// 绑定单个按键事件 InputAction
+	template<class UserClass>
+	FInputKeyBinding& DDBindInput(UserClass* UserObj, typename FInputActionHandlerSignature::TUObjectMethodDelegate<UserClass>::FMethodPtr InMethod, const FKey Key, const EInputEvent KetEvent);
+	
+	// 绑定Action按键事件 InputAction
+	template<class UserClass>
+	FInputActionBinding& DDBindAction(UserClass* UserObj, typename FInputActionHandlerSignature::TUObjectMethodDelegate<UserClass>::FMethodPtr InMethod, const FName ActionName, const EInputEvent KetEvent);
+
+	
+	// 绑定多个按键
+	template<typename UserClass>
+	UDDInputBinder& DDBindInput(UserClass* UserObj, typename FDDInputEvent::TUObjectMethodDelegate<UserClass>::FMethodPtr InMethod, TArray<FKey>& KeyGroup, FName ObjectName);;
+
+	// 解绑对象的所有按键事件
+	void UnBindInput(FName ObjectName);
 public:
 
 	TArray<UDDModule*> ChildrenModule;
@@ -127,4 +151,43 @@ template<typename RetType, typename... VarTypes>
 DDFunHandle UDDModule::RegisterFunPort(FName CallName, TFunction<RetType(VarTypes...)> InsFun)
 {
 	return Message->RegisterFunPort<RetType, VarTypes...>(CallName, InsFun);
+}
+
+template <class UserClass>
+FInputAxisBinding& UDDModule::DDBindAxis(UserClass* UserObj,
+	typename FInputAxisHandlerSignature::TUObjectMethodDelegate<UserClass>::FMethodPtr InMethod, const FName AxisName_1)
+{
+	return Message->DDBindAxis(UserObj, InMethod, AxisName_1);
+}
+
+template <class UserClass>
+FInputTouchBinding& UDDModule::DDBindTouch(UserClass* UserObj,
+	typename FInputTouchHandlerSignature::TUObjectMethodDelegate<UserClass>::FMethodPtr InMethod,
+	const EInputEvent KetEvent)
+{
+	return Message->DDBindTouch(UserObj, InMethod, KetEvent);
+}
+
+template <class UserClass>
+FInputKeyBinding& UDDModule::DDBindInput(UserClass* UserObj,
+	typename FInputActionHandlerSignature::TUObjectMethodDelegate<UserClass>::FMethodPtr InMethod, const FKey Key,
+	const EInputEvent KetEvent)
+{
+	return Message->DDBindInput(UserObj, InMethod, Key, KetEvent);
+}
+
+template <class UserClass>
+FInputActionBinding& UDDModule::DDBindAction(UserClass* UserObj,
+	typename FInputActionHandlerSignature::TUObjectMethodDelegate<UserClass>::FMethodPtr InMethod,
+	const FName ActionName, const EInputEvent KetEvent)
+{
+	return Message->DDBindAction(UserObj, InMethod, ActionName, KetEvent);
+}
+
+template <typename UserClass>
+UDDInputBinder& UDDModule::DDBindInput(UserClass* UserObj,
+	typename FDDInputEvent::TUObjectMethodDelegate<UserClass>::FMethodPtr InMethod, TArray<FKey>& KeyGroup,
+	FName ObjectName)
+{
+	return Message->DDBindInput(UserObj, InMethod, KeyGroup, ObjectName);
 }

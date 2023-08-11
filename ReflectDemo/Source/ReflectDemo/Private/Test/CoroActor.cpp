@@ -21,10 +21,16 @@ void ACoroActor::DDEnable()
 	// DDH::Debug(10) << "StartCoroutine --> " << StartCoroutine("CoroTest", CoroTestThree()) << DDH::Endl();
 	
 	// InvokeRepeat("EchoInfo", 3.f, 2.f, this, &ACoroActor::EchoCoroInfo);
+	
+	// StartCoroutine("CoroFixed", CoroFixed());
 
 	
-	StartCoroutine("CoroFixed", CoroFixed());
+	// DDBindInput(this, &ACoroActor::BKetEvent, EKeys::B, IE_Pressed);
+
+	DDBindInput(this, &ACoroActor::MultiKeyEvent, EKeys::A, EKeys::S, EKeys::D);
 }
+
+
 
 void ACoroActor::DDTick(float DeltaSeconds)
 {
@@ -287,87 +293,98 @@ bool ACoroActor::PauseLambuda()
 }
 
 
+void ACoroActor::BKetEvent()
+{
+	DDH::Debug(10) << "BKetEvent" << DDH::Endl();
+}
+
+void ACoroActor::MultiKeyEvent()
+{
+	DDH::Debug(10) << "MultiKeyEvent" << DDH::Endl();
+}
+
+
 #if 0
 DDCoroTask* ACoroActor::CoroTestThree()
 {
-	//协程参数区块
-#pragma region DDCORO_PARAM
-	struct DGCoroTask : public DDCoroTask
-	{
-		ACoroActor* D;
-		DGCoroTask(ACoroActor* Data, int32 CoroCount) : DDCoroTask(CoroCount) { D = Data; }
-#pragma endregion
-
-
-		//用来定义类变量, 需要保存状态字变量
-
-
-#define DDYIELD_COUNT -1
-//Work方法开头
-#pragma region DDCORO_WORK_START
-		virtual void Work(float DeltaTime) override
-		{
-			goto DDCORO_LABEL_PICKER;
-		DDCORO_LABEL_START:
-#pragma endregion
-
-
-			//协程方法逻辑
-#pragma region CoroFunCode
-
-#if DDYIELD_COUNT == -1
-#define DDYIELD_COUNT 0
-			DDCORO_LABEL_0 :
-#elif DDYIELD_COUNT == 0
-#define DDYIELD_COUNT 1
-			DDCORO_LABEL_1 :
-#endif
-				if (CoroStack[DDYIELD_COUNT]->UpdateOperate(&(D->IsCoroPause)))
-					goto DDCORO_LABEL_END;
-
-
-#if DDYIELD_COUNT == -1
-#define DDYIELD_COUNT 0
-						   DDCORO_LABEL_0 :
-#elif DDYIELD_COUNT == 0
-#define DDYIELD_COUNT 1
-						   DDCORO_LABEL_1 :
-#endif
-							   if (CoroStack[DDYIELD_COUNT]->UpdateOperate(10))
-								   goto DDCORO_LABEL_END;
-
-#pragma endregion
-
-
-										  //Work方法中间
-#pragma region DDCORO_WORK_MIDDLE
-										  goto DDCORO_LABEL_END;
-									  DDCORO_LABEL_PICKER:
-#pragma endregion
-
-
-										  //协程条件跳转代码
-#pragma region CoroPicker
-#if DDYIELD_COUNT == 0
-										  if (CoroStack[0]->IsActive) goto DDCORO_LABEL_0;
-#elif DDYIELD_COUNT == 1
-										  if (CoroStack[0]->IsActive) goto DDCORO_LABEL_0;
-										  if (CoroStack[1]->IsActive) goto DDCORO_LABEL_1;
-#endif
-
-#pragma endregion
-
-
-										  //Work方法结尾
-#pragma region DDCORO_WORK_END
-										  goto DDCORO_LABEL_START;
-									  DDCORO_LABEL_END:
-										  ;
-		}
-	};
-	return new DGCoroTask(this, DDYIELD_COUNT);
-#pragma endregion
-
+// 	//协程参数区块
+// #pragma region DDCORO_PARAM
+// 	struct DGCoroTask : public DDCoroTask
+// 	{
+// 		ACoroActor* D;
+// 		DGCoroTask(ACoroActor* Data, int32 CoroCount) : DDCoroTask(CoroCount) { D = Data; }
+// #pragma endregion
+//
+//
+// 		//用来定义类变量, 需要保存状态字变量
+//
+//
+// #define DDYIELD_COUNT -1
+// //Work方法开头
+// #pragma region DDCORO_WORK_START
+// 		virtual void Work(float DeltaTime) override
+// 		{
+// 			goto DDCORO_LABEL_PICKER;
+// 		DDCORO_LABEL_START:
+// #pragma endregion
+//
+//
+// 			//协程方法逻辑
+// #pragma region CoroFunCode
+//
+// #if DDYIELD_COUNT == -1
+// #define DDYIELD_COUNT 0
+// 			DDCORO_LABEL_0 :
+// #elif DDYIELD_COUNT == 0
+// #define DDYIELD_COUNT 1
+// 			DDCORO_LABEL_1 :
+// #endif
+// 				if (CoroStack[DDYIELD_COUNT]->UpdateOperate(&(D->IsCoroPause)))
+// 					goto DDCORO_LABEL_END;
+//
+//
+// #if DDYIELD_COUNT == -1
+// #define DDYIELD_COUNT 0
+// 						   DDCORO_LABEL_0 :
+// #elif DDYIELD_COUNT == 0
+// #define DDYIELD_COUNT 1
+// 						   DDCORO_LABEL_1 :
+// #endif
+// 							   if (CoroStack[DDYIELD_COUNT]->UpdateOperate(10))
+// 								   goto DDCORO_LABEL_END;
+//
+// #pragma endregion
+//
+//
+// 										  //Work方法中间
+// #pragma region DDCORO_WORK_MIDDLE
+// 										  goto DDCORO_LABEL_END;
+// 									  DDCORO_LABEL_PICKER:
+// #pragma endregion
+//
+//
+// 										  //协程条件跳转代码
+// #pragma region CoroPicker
+// #if DDYIELD_COUNT == 0
+// 										  if (CoroStack[0]->IsActive) goto DDCORO_LABEL_0;
+// #elif DDYIELD_COUNT == 1
+// 										  if (CoroStack[0]->IsActive) goto DDCORO_LABEL_0;
+// 										  if (CoroStack[1]->IsActive) goto DDCORO_LABEL_1;
+// #endif
+//
+// #pragma endregion
+//
+//
+// 										  //Work方法结尾
+// #pragma region DDCORO_WORK_END
+// 										  goto DDCORO_LABEL_START;
+// 									  DDCORO_LABEL_END:
+// 										  ;
+// 		}
+// 	};
+// 	return new DGCoroTask(this, DDYIELD_COUNT);
+// #pragma endregion
+//
 
 }
 #endif

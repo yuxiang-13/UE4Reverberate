@@ -60,6 +60,11 @@ void UDDModule::ModuleTick(float DeltaSeconds)
 
 }
 
+void UDDModule::UnBindInput(FName ObjectName)
+{
+	Message->UnBindInput(ObjectName);
+}
+
 void UDDModule::ChangeModuleType(FName ModuleType)
 {
 	ModuleIndex = DDH::GetEnumIndexFromName(ModuleType.ToString(), GetFName());
@@ -339,4 +344,3 @@ void UDDModule::ExecuteAll(DDObjectAgreement Agreement, DDParam* Param)
 		}
 	}
 }
-

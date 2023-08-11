@@ -208,6 +208,10 @@ protected:
 
 	bool PauseLambuda();
 
+	void BKetEvent();
+
+	
+	void MultiKeyEvent();
 protected:
 
 	CoroNode TimeNode;

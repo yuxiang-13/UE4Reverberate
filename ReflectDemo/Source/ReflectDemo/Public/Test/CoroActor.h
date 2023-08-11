@@ -187,14 +187,16 @@ public:
 	virtual void DDTick(float DeltaSeconds) override;
 
 protected:
-
 	void CoroTestOne(float DeltaSeconds);
-
 	CoroTask* CoroTestTwo();
-
 	DDCoroTask* CoroTestThree();
-
 	DDCoroTask* CoroFunc();
+
+
+	
+	DDCoroTask* CoroFixed();
+	void StopCoro();
+	
 
 	void TempStartCoroutine(CoroTask* InTask);
 

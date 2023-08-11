@@ -770,12 +770,15 @@ struct DDCoroNode
 struct DDCoroTask
 {
 public:
+	// 是否销毁
+	bool IsDestroy;
 	// 多个协程节点
 	TArray<DDCoroNode*> CoroStack;
 public:
 	// 构造
 	DDCoroTask(int32 CoroCount)
 	{
+		IsDestroy = false;
 		for (int i= 0; i <= CoroCount; ++i)
 		{
 			CoroStack.Push(new DDCoroNode());

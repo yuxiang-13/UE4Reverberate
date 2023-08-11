@@ -20,7 +20,10 @@ void ACoroActor::DDEnable()
 
 	// DDH::Debug(10) << "StartCoroutine --> " << StartCoroutine("CoroTest", CoroTestThree()) << DDH::Endl();
 	
-	InvokeRepeat("EchoInfo", 3.f, 2.f, this, &ACoroActor::EchoCoroInfo);
+	// InvokeRepeat("EchoInfo", 3.f, 2.f, this, &ACoroActor::EchoCoroInfo);
+
+	
+	StartCoroutine("CoroFixed", CoroFixed());
 }
 
 void ACoroActor::DDTick(float DeltaSeconds)
@@ -226,7 +229,31 @@ DDCoroTask* ACoroActor::CoroFunc()
 #include DDCORO_END()
 }
 
-void ACoroActor::TempStartCoroutine(CoroTask* InTask)
+DDCoroTask* ACoroActor::CoroFixed()
+{
+	DDCORO_PARAM(ACoroActor);
+#include DDCORO_BEGIN()
+
+#include DDYIELD_READY()
+	DDYIELD_RETURN_SECOND(5.f);
+	DDH::Debug(10) << "StopCoro 1111" << DDH::Endl();
+	
+	D->StopCoro();
+
+#include DDYIELD_READY()
+	DDYIELD_RETURN_SECOND(3.f);
+	DDH::Debug(10) << "StopCoro 2222" << DDH::Endl();
+
+
+#include DDCORO_END()
+}
+
+void ACoroActor::StopCoro()
+{
+	StopCoroutine("CoroFixed");
+}
+
+	void ACoroActor::TempStartCoroutine(CoroTask* InTask)
 {
 	TaskList.Push(InTask);
 }

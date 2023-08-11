@@ -33,7 +33,7 @@ void UDDMessage::MessageTick(float DeltaSeconds)
 		for (TMap<FName, DDCoroTask*>::TIterator Ih(It->Value); Ih; ++Ih)
 		{
 			Ih->Value->Work(DeltaSeconds);
-			if (Ih->Value->IsFinish())
+			if (Ih.Value()->IsDestroy || Ih->Value->IsFinish())
 			{
 				delete Ih->Value;
 				CompleteNode.Push(Ih->Key);
@@ -54,7 +54,7 @@ void UDDMessage::MessageTick(float DeltaSeconds)
 		TArray<FName> CompleteNode;
 		for (TMap<FName, DDInvokeTask*>::TIterator Ih(It->Value); Ih; ++Ih)
 		{
-			if (Ih->Value->UpdateOperate(DeltaSeconds))
+			if (Ih.Value()->IsDestroy || Ih->Value->UpdateOperate(DeltaSeconds))
 			{
 				delete Ih.Value();
 				CompleteNode.Push(Ih->Key);
@@ -92,10 +92,7 @@ bool UDDMessage::StopCoroutine(FName ObjectName, FName CoroName)
 	if (CoroStack.Contains(ObjectName) && CoroStack.Find(ObjectName)->Find(CoroName))
 	{
 		DDCoroTask* CoroTask = *(CoroStack.Find(ObjectName)->Find(CoroName));
-		CoroStack.Find(ObjectName)->Remove(CoroName);
-		if (CoroStack.Find(ObjectName)->Num() == 0)
-			CoroStack.Remove(ObjectName);
-		delete CoroTask;
+		CoroTask->IsDestroy = true;
 		return true;
 	}
 	return false;
@@ -106,8 +103,7 @@ void UDDMessage::StopAllCorotine(FName ObjectName)
 	if (CoroStack.Contains(ObjectName))
 	{
 		for (TMap<FName, DDCoroTask*>::TIterator It(*CoroStack.Find(ObjectName)); It; ++It)
-			delete It->Value;
-		CoroStack.Remove(ObjectName);
+			It->Value->IsDestroy = true;
 	}
 }
 
@@ -135,10 +131,7 @@ bool UDDMessage::StopInvoke(FName ObjectName, FName InvokeName)
 	if (InvokeStack.Contains(ObjectName) && InvokeStack.Find(ObjectName)->Find(InvokeName))
 	{
 		DDInvokeTask* InvokeTask = *(InvokeStack.Find(ObjectName)->Find(InvokeName));
-		InvokeStack.Find(ObjectName)->Remove(InvokeName);
-		if (InvokeStack.Find(ObjectName)->Num() == 0)
-			InvokeStack.Remove(ObjectName);
-		delete InvokeTask;
+		InvokeTask->IsDestroy = true;
 		return true;
 	}
 	return false;
@@ -149,8 +142,7 @@ void UDDMessage::StopAllInvoke(FName ObjectName)
 	if (InvokeStack.Contains(ObjectName))
 	{
 		for (TMap<FName, DDInvokeTask*>::TIterator It(*InvokeStack.Find(ObjectName)); It; ++It)
-			delete It->Value;
-		InvokeStack.Remove(ObjectName);
+			It->Value->IsDestroy = true;
 	}
 }
 

@@ -5,7 +5,7 @@
 #include "CoreMinimal.h"
 #include "Engine/DataAsset.h"
 #include "GameFramework/Actor.h"
-#include "WealthActor.generated.h"
+#include "TopWealthActor.generated.h"
 
 
 
@@ -30,28 +30,28 @@ public:
 	FSoftObjectPath WealthPath;
 };
 
-// 步骤1 声明DataAssest类
+// // 步骤1 声明DataAssest类
+// UCLASS()
+// class REFLECTDEMO_API UWealthData : public UDataAsset
+// {
+// 	GENERATED_BODY()
+// public:
+// 	UPROPERTY(EditAnywhere)
+// 	TArray<UTexture2D*> WealthTexure;
+//
+// 	UPROPERTY(EditAnywhere)
+// 	TArray<FWealthNode> WealthGroup;
+// };
+
+
 UCLASS()
-class REFLECTDEMO_API UWealthData : public UDataAsset
-{
-	GENERATED_BODY()
-public:
-	UPROPERTY(EditAnywhere)
-	TArray<UTexture2D*> WealthTexure;
-
-	UPROPERTY(EditAnywhere)
-	TArray<FWealthNode> WealthGroup;
-};
-
-
-UCLASS()
-class REFLECTDEMO_API AWealthActor : public AActor
+class REFLECTDEMO_API ATopWealthActor : public AActor
 {
 	GENERATED_BODY()
 	
 public:	
 	// Sets default values for this actor's properties
-	AWealthActor();
+	ATopWealthActor();
 
 	void AssignWealthWidget(class UWealthWidget* InWidget);
 
@@ -63,10 +63,10 @@ public:
 public:
 	UPROPERTY(EditAnywhere)
 	UStaticMeshComponent* WorkMesh;
-	
-	// 步骤2 使用DataAssest类
-	UPROPERTY(EditAnywhere)
-	UWealthData* WealthData;
+	//
+	// // 步骤2 使用DataAssest类
+	// UPROPERTY(EditAnywhere)
+	// UWealthData* WealthData;
 
 
 	// 软引用三个 蓝图实例路径（只是路径）

@@ -1,37 +1,32 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "Wealth/WealthWidget.h"
-
-#include "Components/Image.h"
+#include "Wealth/TopWealthWidget.h"
 #include "Components/Overlay.h"
 #include "Components/OverlaySlot.h"
 #include "Kismet/GameplayStatics.h"
-#include "Wealth/WealthActor.h"
+#include "Wealth/TopWealthActor.h"
 
-bool UWealthWidget::Initialize()
+bool UTopWealthWidget::Initialize()
 {
 	if (!Super::Initialize())
 	{
 		return false;
 	}
 	TArray<AActor*> ActArray;
-	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AWealthActor::StaticClass(), ActArray);
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ATopWealthActor::StaticClass(), ActArray);
 	if (ActArray.Num() > 0)
 	{
-		AWealthActor* WealthActor = Cast<AWealthActor>(ActArray[0]);
-		WealthActor->AssignWealthWidget(this);
 	}
 	
 	return true;
 }
 
-void UWealthWidget::AssignTexture(UTexture2D* InTexture)
+void UTopWealthWidget::AssignTexture(UTexture2D* InTexture)
 {
-	TexImage->SetBrushFromTexture(InTexture);
 }
 
-void UWealthWidget::AssignContent(UUserWidget* InWidget)
+void UTopWealthWidget::AssignContent(UUserWidget* InWidget)
 {
 	UOverlaySlot* ContentSlot = ContentBox->AddChildToOverlay(InWidget);
 	ContentSlot->SetPadding(FMargin(0.f));

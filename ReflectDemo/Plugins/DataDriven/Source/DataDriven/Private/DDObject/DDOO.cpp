@@ -258,3 +258,23 @@ void IDDOO::UnBindInput()
 	IModule->UnBindInput(GetObjectName());
 }
 
+FWealthURL* IDDOO::GainWealthURL(FName WealthName)
+{
+	return IModule->GainWealthURL(WealthName);
+}
+
+void IDDOO::GainWealthURL(FName WealthKind, TArray<FWealthURL*>& OutURL)
+{
+	IModule->GainWealthURL(WealthKind, OutURL);
+}
+
+void IDDOO::LoadObjectWealth(FName WealthName, FName FunName)
+{
+	IModule->LoadObjectWealth(WealthName, GetObjectName(), FunName);
+}
+
+void IDDOO::LoadObjectWealthKind(FName WealthKind, FName FunName)
+{
+	IModule->LoadObjectWealthKind(WealthKind, GetObjectName(), FunName);
+}
+

@@ -166,6 +166,15 @@ protected:
 	// 删除该对象所有的  多个按键事件
 	void UnBindInput();
 	
+	// 外部方法，单纯获取资源链接
+	FWealthURL* GainWealthURL(FName WealthName);
+	// 获取一种了类型的资源URL
+	void GainWealthURL(FName WealthKind, TArray<FWealthURL*>& OutURL);
+
+	
+	// 加载Object类型资源接口
+	void LoadObjectWealth(FName WealthName, FName FunName);
+	void LoadObjectWealthKind(FName WealthKind, FName FunName);
 protected:
 
 	//保存自身的UObject

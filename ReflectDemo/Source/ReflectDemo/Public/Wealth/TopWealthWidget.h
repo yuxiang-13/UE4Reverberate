@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
-#include "WealthWidget.generated.h"
+#include "TopWealthWidget.generated.h"
 
 
 class UImage;
@@ -13,7 +13,7 @@ class UOverlay;
  * 
  */
 UCLASS()
-class REFLECTDEMO_API UWealthWidget : public UUserWidget
+class REFLECTDEMO_API UTopWealthWidget : public UUserWidget
 {
 	GENERATED_BODY()
 public:

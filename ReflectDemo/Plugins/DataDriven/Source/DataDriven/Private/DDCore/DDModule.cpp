@@ -44,6 +44,9 @@ void UDDModule::ModuleInit()
 
 void UDDModule::ModuleBeginPlay()
 {
+	// 给Wealth指定资源
+	Wealth->AssignData(WealthData);
+	
 	//调用BeginPlay
 	Model->ModelBeginPlay();
 	Message->MessageBeginPlay();
@@ -63,6 +66,26 @@ void UDDModule::ModuleTick(float DeltaSeconds)
 void UDDModule::UnBindInput(FName ObjectName)
 {
 	Message->UnBindInput(ObjectName);
+}
+
+FWealthURL* UDDModule::GainWealthURL(FName WealthName)
+{
+	return Wealth->GainWealthURL(WealthName);
+}
+
+void UDDModule::GainWealthURL(FName WealthKind, TArray<FWealthURL*>& OutURL)
+{
+	Wealth->GainWealthURL(WealthKind, OutURL);
+}
+
+void UDDModule::LoadObjectWealth(FName WealthName, FName ObjectName, FName FunName)
+{
+	Wealth->LoadObjectWealth(WealthName,ObjectName,FunName);
+}
+
+void UDDModule::LoadObjectWealthKind(FName WealthKind, FName ObjectName, FName FunName)
+{
+	Wealth->LoadObjectWealthKind(WealthKind, ObjectName, FunName);
 }
 
 void UDDModule::ChangeModuleType(FName ModuleType)

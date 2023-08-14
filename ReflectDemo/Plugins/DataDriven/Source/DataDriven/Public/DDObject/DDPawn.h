@@ -17,20 +17,20 @@ public:
 	// Sets default values for this pawn's properties
 	ADDPawn();
 
-	//ÖØĞ´ÊÍ·Åº¯Êı
+	//é‡å†™é‡Šæ”¾å‡½æ•°
 	virtual void DDRelease() override;
 
 public:
 
-	//Ä£×éÃû×Ö,Èç¹ûÎª¿Õ,ËµÃ÷ÒªÊÖ¶¯Ö¸¶¨,²»Îª¿Õ¾ÍÊÇ×Ô¶¯Ö¸¶¨
+	//æ¨¡ç»„åå­—,å¦‚æœä¸ºç©º,è¯´æ˜è¦æ‰‹åŠ¨æŒ‡å®š,ä¸ä¸ºç©ºå°±æ˜¯è‡ªåŠ¨æŒ‡å®š
 	UPROPERTY(EditAnywhere, Category = "DataDriven")
-		FName ModuleName;
-	//¶ÔÏóÃû×Ö,Èç¹ûÎª¿Õ,ËµÃ÷ÒªÊÖ¶¯Ö¸¶¨,²»Îª¿Õ¾ÍÊÇ×Ô¶¯Ö¸¶¨
+	FName ModuleName;
+	//å¯¹è±¡åå­—,å¦‚æœä¸ºç©º,è¯´æ˜è¦æ‰‹åŠ¨æŒ‡å®š,ä¸ä¸ºç©ºå°±æ˜¯è‡ªåŠ¨æŒ‡å®š
 	UPROPERTY(EditAnywhere, Category = "DataDriven")
-		FName ObjectName;
-	//ÀàÃû×Ö,Èç¹ûÎª¿Õ,ËµÃ÷ÒªÊÖ¶¯Ö¸¶¨,²»Îª¿Õ¾ÍÊÇ×Ô¶¯Ö¸¶¨
+	FName ObjectName;
+	//ç±»åå­—,å¦‚æœä¸ºç©º,è¯´æ˜è¦æ‰‹åŠ¨æŒ‡å®š,ä¸ä¸ºç©ºå°±æ˜¯è‡ªåŠ¨æŒ‡å®š
 	UPROPERTY(EditAnywhere, Category = "DataDriven")
-		FName ClassName;
+	FName ClassName;
 
 protected:
 	// Called when the game starts or when spawned

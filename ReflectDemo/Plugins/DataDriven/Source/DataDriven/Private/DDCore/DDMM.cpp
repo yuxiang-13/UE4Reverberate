@@ -37,4 +37,13 @@ void IDDMM::ExecuteFunction(DDObjectAgreement Agreement, DDParam* Param)
 		// 查找对应模组的方法
 		IDriver->ExecuteFunction(Agreement, Param);
 	}
+}
+
+UWorld* IDDMM::GetDDWorld() const
+{
+	if (IDriver)
+	{
+		return IDriver->GetWorld();
+	}
+	return NULL;
 };

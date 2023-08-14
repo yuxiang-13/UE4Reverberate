@@ -1,15 +1,14 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "Wealth/WealthActor.h"
+#include "Wealth/TopWealthActor.h"
 
 #include "Common/FWCommon.h"
 #include "Engine/ObjectLibrary.h"
 #include "Engine/StreamableManager.h"
-#include "Wealth/WealthWidget.h"
 
 // Sets default values
-AWealthActor::AWealthActor()
+ATopWealthActor::ATopWealthActor()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
@@ -21,7 +20,7 @@ AWealthActor::AWealthActor()
 	
 }
 
-void AWealthActor::AssignWealthWidget(UWealthWidget* InWidget)
+void ATopWealthActor::AssignWealthWidget(UWealthWidget* InWidget)
 {
 	wealthWidget = InWidget;
 
@@ -29,7 +28,7 @@ void AWealthActor::AssignWealthWidget(UWealthWidget* InWidget)
 }
 
 // Called when the game starts or when spawned
-void AWealthActor::BeginPlay()
+void ATopWealthActor::BeginPlay()
 {
 	Super::BeginPlay();
 
@@ -39,11 +38,11 @@ void AWealthActor::BeginPlay()
 	
 	StreamableManagerOperate();
 
-	// FTimerDelegate UpdateMesgDele = FTimerDelegate::CreateUObject(this, &AWealthActor::UpdateMesh);
+	// FTimerDelegate UpdateMesgDele = FTimerDelegate::CreateUObject(this, &ATopWealthActor::UpdateMesh);
 	// GetWorld()->GetTimerManager().SetTimer(UpdateMeshHandle, UpdateMesgDele, 1.f, true);
 }
 
-void AWealthActor::WealthState()
+void ATopWealthActor::WealthState()
 {
 	// LoadObject(); 这个会把硬盘中资源加载到内存
 	// FindObject(); 这个只能在内存中查找资源
@@ -61,17 +60,17 @@ void AWealthActor::WealthState()
 	
 }
 
-void AWealthActor::UpdateMesh()
+void ATopWealthActor::UpdateMesh()
 {
-	if (WealthData && WealthData->WealthGroup.Num() > 0)
-	{
-		UStaticMesh* FactMesh = LoadObject<UStaticMesh>(NULL, *(WealthData->WealthGroup[MeshIndex].WealthPath.ToString()));
-		WorkMesh->SetStaticMesh(FactMesh);
-		MeshIndex = (MeshIndex + 1) >= WealthData->WealthGroup.Num() ? 0 : (MeshIndex + 1);
-	}
+	// if (WealthData && WealthData->WealthGroup.Num() > 0)
+	// {
+	// 	UStaticMesh* FactMesh = LoadObject<UStaticMesh>(NULL, *(WealthData->WealthGroup[MeshIndex].WealthPath.ToString()));
+	// 	WorkMesh->SetStaticMesh(FactMesh);
+	// 	MeshIndex = (MeshIndex + 1) >= WealthData->WealthGroup.Num() ? 0 : (MeshIndex + 1);
+	// }
 }
 
-void AWealthActor::ObjectLibraryOperate()
+void ATopWealthActor::ObjectLibraryOperate()
 {
 	if (!ObjectLibrary)
 	{
@@ -95,7 +94,7 @@ void AWealthActor::ObjectLibraryOperate()
 	}
 }
 
-void AWealthActor::StreamableManagerOperate()
+void ATopWealthActor::StreamableManagerOperate()
 {
 	// 创建资源加载管理器
 	WealthLoader = new FStreamableManager();
@@ -104,13 +103,13 @@ void AWealthActor::StreamableManagerOperate()
 	  TexturePaths,
 		 FStreamableDelegate::CreateUObject(
 			this,
-			&AWealthActor::StreamableManagerLoadComplete
+			&ATopWealthActor::StreamableManagerLoadComplete
 		 )
 	);
 }
 
 // 加载完成后 动态修改 图片
-void AWealthActor::StreamableManagerLoadComplete()
+void ATopWealthActor::StreamableManagerLoadComplete()
 {
 	// 获取资源数组
 	TArray<UObject*> OutObjects;
@@ -126,18 +125,15 @@ void AWealthActor::StreamableManagerLoadComplete()
 	}
 
 	// 每隔0.5s切换图片
-	FTimerDelegate UpdateTextureDele = FTimerDelegate::CreateUObject(this, &AWealthActor::UpdateTexture);
+	FTimerDelegate UpdateTextureDele = FTimerDelegate::CreateUObject(this, &ATopWealthActor::UpdateTexture);
 	GetWorld()->GetTimerManager().SetTimer(UpdateTextureHandle, UpdateTextureDele, 0.5f, true);
 }
 
-void AWealthActor::UpdateTexture()
+void ATopWealthActor::UpdateTexture()
 {
-	if (!wealthWidget) return;
-	wealthWidget->AssignTexture(TextureGroup[TextureIndex]);
-	TextureIndex = (TextureIndex + 1) >= TextureGroup.Num() ? 0 : (TextureIndex + 1);
 }
 
-void AWealthActor::UObjectUClassUBleprint()
+void ATopWealthActor::UObjectUClassUBleprint()
 {
 	return;
 
@@ -176,7 +172,7 @@ void AWealthActor::UObjectUClassUBleprint()
 	 *
 	 1 同步加载蓝图类为Class
 	 FStreamableManager streamableManager;
-	 FString strBPFileName = "/Game/ThirdPersonCPP/Blueprints/TestActor.TestActor_C";
+	 FString strBPFileName = "/Game/ThirdPersonCPP/Blueprints/TopActor.TopActor_C";
 	 UClass* pClass = streamableManager.LoadSynchronous<UClass>(FSoftObjectPath(strBPFileName));
 	 if (pClass)
 	 {
@@ -257,7 +253,7 @@ void AWealthActor::UObjectUClassUBleprint()
 
 
 // Called every frame
-void AWealthActor::Tick(float DeltaTime)
+void ATopWealthActor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 

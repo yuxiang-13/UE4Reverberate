@@ -108,13 +108,24 @@ public:
 
 	// 解绑对象的所有按键事件
 	void UnBindInput(FName ObjectName);
+
+
+	
+	// 外部方法，单纯获取资源链接
+	FWealthURL* GainWealthURL(FName WealthName);
+	// 获取一种了类型的资源URL
+	void GainWealthURL(FName WealthKind, TArray<FWealthURL*>& OutURL);
+	
+	// 加载Object类型资源接口
+	void LoadObjectWealth(FName WealthName, FName ObjectName, FName FunName);
+	void LoadObjectWealthKind(FName WealthKind, FName ObjectName, FName FunName);
 public:
-
+	UPROPERTY(EditAnywhere, Category="DataDriven")
+	TArray<UWealthData*> WealthData;
+	
 	TArray<UDDModule*> ChildrenModule;
-
-	UPROPERTY(VisibleAnywhere, Category = "DataDriven")
-		int32 ModuleIndex;
-
+	
+	int32 ModuleIndex;
 protected:
 
 	//执行单个对象方法

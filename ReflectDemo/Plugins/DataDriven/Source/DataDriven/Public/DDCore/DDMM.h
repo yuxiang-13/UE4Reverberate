@@ -30,6 +30,9 @@ protected:
 	
 	// 执行反射方法
 	void ExecuteFunction(DDObjectAgreement Agreement, DDParam* Param);
+
+	// 获取世界
+	UWorld* GetDDWorld() const;
 protected:
 	// 保存对应的模组
 	UDDModule* IModule;

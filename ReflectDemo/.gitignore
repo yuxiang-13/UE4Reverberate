@@ -68,6 +68,7 @@
 ExportedObj/
 .consulo/
 *.csproj
+!/Plugins/Puerts/Source/CSharpParamDefaultValueMetas/*.csproj
 *.unityproj
 *.sln
 *.suo

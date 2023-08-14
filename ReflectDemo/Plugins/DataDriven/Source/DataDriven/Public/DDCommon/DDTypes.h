@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Engine/DataAsset.h"
 #include "UObject/NoExportTypes.h"
 #include "Engine/GameEngine.h"
 
@@ -877,3 +878,168 @@ struct DDInvokeTask
 
 
 
+#pragma region Wealth
+
+USTRUCT()
+struct FWealthItem
+{
+	GENERATED_BODY()
+public:
+	// 对象名
+	UPROPERTY(EditAnywhere)
+		FName ObjectName;
+	// 类名
+	UPROPERTY(EditAnywhere)
+		FName ClassName;
+	
+};
+
+USTRUCT()
+struct FWealthObject: public FWealthItem
+{
+	GENERATED_BODY()
+public:
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<UObject> WealthClass;  // 这样，就只能蓝图中指定 继承自UObject类的蓝图
+};
+
+USTRUCT()
+struct FWealthActor: public FWealthItem
+{
+	GENERATED_BODY()
+public:
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<AActor> WealthClass;  // 这样，就只能蓝图中指定 继承自AActor类的蓝图
+
+	UPROPERTY(EditAnywhere)
+	FTransform Transform; // 因为Actor类可以 放置到场景
+};
+
+USTRUCT()
+struct FWealthWidget: public FWealthItem
+{
+	GENERATED_BODY()
+public:
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<UUserWidget> WealthClass;  // 这样，就只能蓝图中指定 继承自UUserWidget类的蓝图
+		
+};
+
+// Object资源结构体
+USTRUCT()
+struct FObjectWealthEntry
+{
+	GENERATED_BODY()
+public:
+	// 资源名
+	UPROPERTY(EditAnywhere)
+	FName WealthName;
+
+	// 资源种类
+	UPROPERTY(EditAnywhere)
+	FName WealthKind;
+
+	// 资源链接 路径
+	UPROPERTY(EditAnywhere)
+	FSoftObjectPath WealthPath;
+
+	// 加载出来的对象,第二次加载直接返回，不需要二次加载了
+	UPROPERTY()
+	UObject* WealthObject;
+};
+
+// UClass类型枚举
+UENUM()
+enum class EWealthType: uint8
+{
+	Object,
+	Actor,
+	Widget,
+};
+// UClass资源结构体
+USTRUCT()
+struct FClassWealthEntry
+{
+	GENERATED_BODY()
+public:
+	// 资源类别
+	UPROPERTY(EditAnywhere)
+	EWealthType WealthType;
+
+	// 资源名
+	UPROPERTY(EditAnywhere)
+	FName WealthName;
+
+	// 资源种类
+	UPROPERTY(EditAnywhere)
+	FName WealthKind;
+	
+	// 资源链接 路径
+	UPROPERTY(EditAnywhere)
+	TSoftClassPtr<UObject> WealthPtr;
+
+	// 加载出来的资源
+	UPROPERTY()
+	UClass* WealthClass;
+};
+
+// 获取资源链接结构体，不进行同异步加载
+USTRUCT()
+struct FWealthURL
+{
+	GENERATED_BODY()
+public:
+	// 资源种类
+	UPROPERTY(EditAnywhere)
+	FName WealthKind;
+
+	// 资源名
+	UPROPERTY(EditAnywhere)
+	FName WealthName;
+
+	// 资源链接 路径
+	UPROPERTY(EditAnywhere)
+	FSoftObjectPath WealthPath;
+	
+	// 资源链接 路径
+	UPROPERTY(EditAnywhere)
+	TSoftClassPtr<UObject> WealthPtr;
+	
+	
+};
+
+
+UCLASS() // 不要拉下 DATADRIVEN_API  ***！！！*** 为什么声明UCLass？ 因为要支持反射，而且只有继承自 -->UObject的类，才能让委托方法BindUObject去绑定
+class DATADRIVEN_API UWealthData : public UDataAsset
+{
+	GENERATED_BODY()
+public:
+	// 模组名字，这个DataAssest下的资源生成的对象，默认到ModuleName对应的模组
+	// 如果为空 则 说明该Asset使用在多个模组下，自动生成的对象，要注册到该Asset放置的 模组下
+	UPROPERTY(EditAnywhere)
+	FName ModuleName;
+	
+	// 自定生成的Object
+	UPROPERTY(EditAnywhere)
+	TArray<FWealthObject> AutoObjectData;
+	// 自定生成的Actor
+	UPROPERTY(EditAnywhere)
+	TArray<FWealthActor> AutoActorData;
+	// 自定生成的Widget
+	UPROPERTY(EditAnywhere)
+	TArray<FWealthWidget> AutoWidgetData;
+	
+public:
+	// Object资源链接集合
+	UPROPERTY(EditAnywhere)
+	TArray<FObjectWealthEntry> ObjectWealthData;
+	// Class资源链接集合
+	UPROPERTY(EditAnywhere)
+	TArray<FClassWealthEntry> ClassWealthData;
+	// 资源链接URL
+	UPROPERTY(EditAnywhere)
+	TArray<FWealthURL> WealthURL;
+};
+
+
+#pragma endregion

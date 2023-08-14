@@ -544,6 +544,77 @@ class DATADRIVEN_API UDDDefine : public UObject
 		delete Param; \
 	}
 
+#define DDOBJFUNC(FuncName); \
+	struct FuncName##Param : DDParam \
+	{ \
+		FuncName##Param() { ParamPtr = NULL; } \
+	};\
+	FuncName##Param* FuncName##RT(int32 InModuleIndex, EAgreementType AgreementType, TArray<FName> ObjectGroup, FName FunctionName) \
+	{ \
+		DDObjectAgreement Agreement; \
+		Agreement.ModuleIndex = InModuleIndex; \
+		Agreement.AgreementType = AgreementType; \
+		Agreement.ObjectGroup = ObjectGroup; \
+		Agreement.FunctionName = FunctionName; \
+		FuncName##Param* Param = new FuncName##Param(); \
+		ExecuteFunction(Agreement, Param); \
+		return Param; \
+	} \
+	FuncName##Param* FuncName##RT(int32 InModuleIndex, EAgreementType AgreementType, FName InObjName, FName FunctionName) \
+	{ \
+		DDObjectAgreement Agreement; \
+		Agreement.ModuleIndex = InModuleIndex; \
+		Agreement.AgreementType = AgreementType; \
+		Agreement.ObjectGroup.Add(InObjName); \
+		Agreement.FunctionName = FunctionName; \
+		FuncName##Param* Param = new FuncName##Param(); \
+		ExecuteFunction(Agreement, Param); \
+		return Param; \
+	} \
+	FuncName##Param* FuncName##RT(int32 InModuleIndex, FName InObjName, FName FunctionName) \
+	{ \
+		DDObjectAgreement Agreement; \
+		Agreement.ModuleIndex = InModuleIndex; \
+		Agreement.AgreementType = EAgreementType::SelfObject; \
+		Agreement.ObjectGroup.Add(InObjName); \
+		Agreement.FunctionName = FunctionName; \
+		FuncName##Param* Param = new FuncName##Param(); \
+		ExecuteFunction(Agreement, Param); \
+		return Param; \
+	} \
+	void FuncName(int32 InModuleIndex, EAgreementType AgreementType, TArray<FName> ObjectGroup, FName FunctionName) \
+	{ \
+		DDObjectAgreement Agreement; \
+		Agreement.ModuleIndex = InModuleIndex; \
+		Agreement.AgreementType = AgreementType; \
+		Agreement.ObjectGroup = ObjectGroup; \
+		Agreement.FunctionName = FunctionName; \
+		FuncName##Param* Param = new FuncName##Param(); \
+		ExecuteFunction(Agreement, Param); \
+		delete Param; \
+	} \
+	void FuncName(int32 InModuleIndex, EAgreementType AgreementType, FName InObjName, FName FunctionName) \
+	{ \
+		DDObjectAgreement Agreement; \
+		Agreement.ModuleIndex = InModuleIndex; \
+		Agreement.AgreementType = AgreementType; \
+		Agreement.ObjectGroup.Add(InObjName); \
+		Agreement.FunctionName = FunctionName; \
+		FuncName##Param* Param = new FuncName##Param(); \
+		ExecuteFunction(Agreement, Param); \
+		delete Param; \
+	} \
+	void FuncName(int32 InModuleIndex, FName InObjName, FName FunctionName) \
+	{ \
+		DDObjectAgreement Agreement; \
+		Agreement.ModuleIndex = InModuleIndex; \
+		Agreement.AgreementType = EAgreementType::SelfObject; \
+		Agreement.ObjectGroup.Add(InObjName); \
+		Agreement.FunctionName = FunctionName; \
+		FuncName##Param* Param = new FuncName##Param(); \
+		ExecuteFunction(Agreement, Param); \
+		delete Param; \
+	}
 
 #define DDOBJFUNC_ONE(FuncName, ParamType1, ParamName1); \
 	struct FuncName##Param : DDParam \

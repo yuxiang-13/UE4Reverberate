@@ -19,7 +19,7 @@ void ULoadWealthWidget::DDLoading()
 
 	// 1 资源名 2 回调函数名
 	// 这样就能在 ViewImage 所有资源加载完成后，自动调用 LoadKindTexture 函数，把资源传到回调
-	LoadObjectWealthKind("ViewImage", "LoadKindTexture");
+	// LoadObjectWealthKind("ViewImage", "LoadKindTexture");
 }
 
 void ULoadWealthWidget::LoadSingleTexture(FName BackName, UObject* BackWealth)

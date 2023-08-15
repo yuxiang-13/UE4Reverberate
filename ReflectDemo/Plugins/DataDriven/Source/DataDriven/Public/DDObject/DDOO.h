@@ -175,6 +175,21 @@ protected:
 	// 加载Object类型资源接口
 	void LoadObjectWealth(FName WealthName, FName FunName);
 	void LoadObjectWealthKind(FName WealthKind, FName FunName);
+	
+	
+	// 加载Class类型资源接口
+	void LoadClassWealth(FName WealthName, FName FunName);
+	void LoadClassWealthKind(FName WealthKind, FName FunName);
+	
+	// 创建一个对象实例
+	void BuildSingleClassWealth(EWealthType WealthType, FName WealthName, FName FunName);
+	void BuildSingleClassWealth(EWealthType WealthType, FName WealthName, FName FunName, FTransform SpawnTransform);
+
+	
+	// 创建同资源种类名的对象实例，同种类名下的每个资源链接创建一个对象实例
+	void BuildKindClassWealth(EWealthType WealthType, FName WealthKind, FName FunName);
+	void BuildKindClassWealth(EWealthType WealthType, FName WealthKind, FName FunName, FTransform SpawnTransforms);
+	void BuildKindClassWealth(EWealthType WealthType, FName WealthKind, FName FunName, TArray<FTransform> SpawnTransforms);
 protected:
 
 	//保存自身的UObject

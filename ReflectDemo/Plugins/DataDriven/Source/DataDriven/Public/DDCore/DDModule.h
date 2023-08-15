@@ -119,6 +119,17 @@ public:
 	// 加载Object类型资源接口
 	void LoadObjectWealth(FName WealthName, FName ObjectName, FName FunName);
 	void LoadObjectWealthKind(FName WealthKind, FName ObjectName, FName FunName);
+
+	
+	// 加载Class类型资源接口
+	void LoadClassWealth(FName WealthName, FName ObjectName, FName FunName);
+	void LoadClassWealthKind(FName WealthKind, FName ObjectName, FName FunName);
+	
+	// 创建一个对象实例
+	void BuildSingleClassWealth(EWealthType WealthType, FName WealthName, FName ObjectName, FName FunName, FTransform SpawnTransform);
+	
+	// 创建同资源种类名的对象实例，同种类名下的每个资源链接创建一个对象实例
+	void BuildKindClassWealth(EWealthType WealthType, FName WealthKind, FName ObjectName, FName FunName, TArray<FTransform> SpawnTransforms);
 public:
 	UPROPERTY(EditAnywhere, Category="DataDriven")
 	TArray<UWealthData*> WealthData;

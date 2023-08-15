@@ -278,3 +278,40 @@ void IDDOO::LoadObjectWealthKind(FName WealthKind, FName FunName)
 	IModule->LoadObjectWealthKind(WealthKind, GetObjectName(), FunName);
 }
 
+void IDDOO::LoadClassWealth(FName WealthName, FName FunName)
+{
+	IModule->LoadClassWealth(WealthName, GetObjectName(), FunName);
+}
+
+void IDDOO::LoadClassWealthKind(FName WealthKind, FName FunName)
+{
+	IModule->LoadClassWealthKind(WealthKind, GetObjectName(), FunName);
+}
+
+void IDDOO::BuildSingleClassWealth(EWealthType WealthType, FName WealthName, FName FunName)
+{
+	IModule->BuildSingleClassWealth(WealthType, WealthName, GetObjectName(), FunName, FTransform::Identity);
+}
+
+void IDDOO::BuildSingleClassWealth(EWealthType WealthType, FName WealthName, FName FunName,
+                                   FTransform SpawnTransform)
+{
+	IModule->BuildSingleClassWealth(WealthType, WealthName, GetObjectName(), FunName, SpawnTransform);
+}
+
+void IDDOO::BuildKindClassWealth(EWealthType WealthType, FName WealthKind, FName FunName)
+{
+	IModule->BuildKindClassWealth(WealthType, WealthKind, GetObjectName(), FunName, TArray<FTransform>{  FTransform::Identity });
+}
+
+void IDDOO::BuildKindClassWealth(EWealthType WealthType, FName WealthKind, FName FunName, FTransform SpawnTransforms)
+{
+	IModule->BuildKindClassWealth(WealthType, WealthKind, GetObjectName(), FunName, TArray<FTransform>{  SpawnTransforms });
+}
+
+void IDDOO::BuildKindClassWealth(EWealthType WealthType, FName WealthKind, FName FunName,
+	TArray<FTransform> SpawnTransforms)
+{
+	IModule->BuildKindClassWealth(WealthType, WealthKind, GetObjectName(), FunName, SpawnTransforms);
+}
+

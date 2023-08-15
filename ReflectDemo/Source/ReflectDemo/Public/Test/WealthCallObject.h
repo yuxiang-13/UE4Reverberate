@@ -13,5 +13,29 @@ UCLASS(Blueprintable, BlueprintType)
 class REFLECTDEMO_API UWealthCallObject : public UDDObject
 {
 	GENERATED_BODY()
+public:
+	virtual void DDLoading() override;
+	virtual void DDTick(float DeltaSeconds) override;
 	
+	UFUNCTION()
+	void LoadActorClass(FName BackName, UClass* BackWealth);
+	UFUNCTION()
+	void LoadKindClass(TArray<FName> BackNames, TArray<UClass*> BackWealths);
+
+	UFUNCTION()
+	void BuildActor(FName BackName, AActor* BackActor);
+	
+	UFUNCTION()
+	void BuildActorKind(TArray<FName> BackName, TArray<AActor*> BackActor);
+public:
+	UPROPERTY(EditAnywhere)
+	FTransform ViewTrans;
+	UPROPERTY(EditAnywhere)
+	float OffsetValue;
+
+	UPROPERTY()
+	AActor* SingleActor;
+
+	UPROPERTY()
+	TArray<AActor*> KindActors;
 };

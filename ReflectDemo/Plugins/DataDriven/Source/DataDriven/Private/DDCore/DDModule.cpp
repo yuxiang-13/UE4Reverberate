@@ -88,6 +88,28 @@ void UDDModule::LoadObjectWealthKind(FName WealthKind, FName ObjectName, FName F
 	Wealth->LoadObjectWealthKind(WealthKind, ObjectName, FunName);
 }
 
+void UDDModule::LoadClassWealth(FName WealthName, FName ObjectName, FName FunName)
+{
+	Wealth->LoadClassWealth(WealthName,ObjectName,FunName);
+}
+
+void UDDModule::LoadClassWealthKind(FName WealthKind, FName ObjectName, FName FunName)
+{
+	Wealth->LoadClassWealthKind(WealthKind, ObjectName, FunName);
+}
+
+void UDDModule::BuildSingleClassWealth(EWealthType WealthType, FName WealthName, FName ObjectName, FName FunName,
+	FTransform SpawnTransform)
+{
+	Wealth->BuildSingleClassWealth(WealthType, WealthName, ObjectName, FunName, SpawnTransform);
+}
+
+void UDDModule::BuildKindClassWealth(EWealthType WealthType, FName WealthKind, FName ObjectName, FName FunName,
+	TArray<FTransform> SpawnTransforms)
+{
+	Wealth->BuildKindClassWealth(WealthType, WealthKind, ObjectName, FunName, SpawnTransforms);
+}
+
 void UDDModule::ChangeModuleType(FName ModuleType)
 {
 	ModuleIndex = DDH::GetEnumIndexFromName(ModuleType.ToString(), GetFName());

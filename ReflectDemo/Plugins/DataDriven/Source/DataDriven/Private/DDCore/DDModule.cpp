@@ -110,6 +110,12 @@ void UDDModule::BuildKindClassWealth(EWealthType WealthType, FName WealthKind, F
 	Wealth->BuildKindClassWealth(WealthType, WealthKind, ObjectName, FunName, SpawnTransforms);
 }
 
+void UDDModule::BuildMultiClassWealth(EWealthType WealthType, FName WealthName, int32 Amount, FName ObjectName,
+	FName FunName, TArray<FTransform> SpawnTransforms)
+{
+	Wealth->BuildMultiClassWealth(WealthType, WealthName, Amount, ObjectName, FunName, SpawnTransforms);
+}
+
 void UDDModule::ChangeModuleType(FName ModuleType)
 {
 	ModuleIndex = DDH::GetEnumIndexFromName(ModuleType.ToString(), GetFName());

@@ -190,6 +190,14 @@ protected:
 	void BuildKindClassWealth(EWealthType WealthType, FName WealthKind, FName FunName);
 	void BuildKindClassWealth(EWealthType WealthType, FName WealthKind, FName FunName, FTransform SpawnTransforms);
 	void BuildKindClassWealth(EWealthType WealthType, FName WealthKind, FName FunName, TArray<FTransform> SpawnTransforms);
+
+
+	//创建多个同资源名的对象实例
+	void BuildMultiClassWealth(EWealthType WealthType, FName WealthName, int32 Amount, FName FunName);
+	void BuildMultiClassWealth(EWealthType WealthType, FName WealthName, int32 Amount, FName FunName, FTransform SpawnTransform);
+	void BuildMultiClassWealth(EWealthType WealthType, FName WealthName, int32 Amount, FName FunName, TArray<FTransform> SpawnTransforms);
+
+	
 protected:
 
 	//保存自身的UObject

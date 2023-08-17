@@ -17,7 +17,11 @@ void UWealthCallObject::DDLoading()
 	{
 		SpawnTransform.Push(FTransform(ViewTrans.GetLocation() + FVector(OffsetValue * i, 0.f, 0.f)));
 	}
-	BuildKindClassWealth(EWealthType::Actor, "ViewActor", "BuildActorKind", SpawnTransform);
+	// BuildKindClassWealth(EWealthType::Actor, "ViewActor", "BuildActorKind", SpawnTransform);
+
+	// BuildMultiClassWealth(EWealthType::Actor, "ViewActor2" ,3, "BuildActorMulti", SpawnTransform);
+
+	StartCoroutine("BuildObjectTest", BuildObjectTest());
 }
 
 void UWealthCallObject::DDTick(float DeltaSeconds)
@@ -35,6 +39,68 @@ void UWealthCallObject::DDTick(float DeltaSeconds)
 }
 
 
+void UWealthCallObject::BuildActorMulti(FName BackName, TArray<AActor*> BackActor)
+{
+	DDH::Debug(10) << BackName << DDH::Endl();
+	KindActors = BackActor;
+}
+
+void UWealthCallObject::BuildSingleObject(FName BackName, UObject* BackObject)
+{
+	DDH::Debug(10) << "BuildSingleObject --> " << BackName << DDH::Endl();
+
+	IDDOO* InstPtr = Cast<IDDOO>(BackObject);
+	if (InstPtr)
+		InstPtr->RegisterToModule(ModuleIndex);
+}
+
+void UWealthCallObject::BuildKindObject(TArray<FName> BackNames, TArray<UObject*> BackObjects)
+{
+	for (int i = 0; i < BackObjects.Num(); ++i)
+	{
+		DDH::Debug(10) << "BuildKindObject --> " << BackNames[i] << DDH::Endl();
+
+		IDDOO* InstPtr = Cast<IDDOO>(BackObjects[i]);
+		if (InstPtr)
+			InstPtr->RegisterToModule(ModuleIndex);
+	}
+}
+
+void UWealthCallObject::BuildMultiObject(FName BackName, TArray<UObject*> BackObjects)
+{
+	DDH::Debug(10) << "BuildMultiObject --> " << BackName << DDH::Endl();
+
+	for (int i = 0; i < BackObjects.Num(); ++i)
+	{
+		IDDOO* InstPtr = Cast<IDDOO>(BackObjects[i]);
+		if (InstPtr)
+			InstPtr->RegisterToModule(ModuleIndex);
+	}
+}
+
+DDCoroTask* UWealthCallObject::BuildObjectTest()
+{
+	DDCORO_PARAM(UWealthCallObject);
+
+#include DDCORO_BEGIN()
+
+	D->BuildSingleClassWealth(EWealthType::Object, "ViewObject2", "BuildSingleObject");
+
+#include DDYIELD_READY()
+	DDYIELD_RETURN_SECOND(10.f);
+
+	D->BuildKindClassWealth(EWealthType::Object, "ViewObject", "BuildKindObject");
+
+#include DDYIELD_READY()
+	DDYIELD_RETURN_SECOND(10.f);
+
+	D->BuildMultiClassWealth(EWealthType::Object, "ViewObject3", 3, "BuildMultiObject");
+
+
+#include DDCORO_END()
+}
+
+
 void UWealthCallObject::BuildActorKind(TArray<FName> BackName, TArray<AActor*> BackActor)
 {
 	for (int i = 0; i < BackName.Num(); i++)
@@ -43,8 +109,6 @@ void UWealthCallObject::BuildActorKind(TArray<FName> BackName, TArray<AActor*> B
 	}
 	KindActors = BackActor;
 }
-
-
 
 void UWealthCallObject::BuildActor(FName BackName, AActor* BackActor)
 {

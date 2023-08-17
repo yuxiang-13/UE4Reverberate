@@ -137,7 +137,45 @@ struct ClassKindLoadNode
 	}
 };
 
-
+struct ClassMultiLoadNode
+{
+	// 加载句柄
+	TSharedPtr<FStreamableHandle> WealthHandle;
+	// 资源结构体
+	FClassWealthEntry* WealthEntry;
+	//请求对象名
+	FName ObjectName;
+	//回调方法名
+	FName FunName;
+	// 生成数量
+	int32 Amount;
+	// 生成位置
+	TArray<FTransform> SpawnTransforms;
+	// 保存生成的对象与名字
+	TArray<UObject*> ObjectGroup;
+	TArray<AActor*> ActorGroup;
+	TArray<UUserWidget*> WidgetGroup;
+	
+	// 构造函数，未加载时
+	ClassMultiLoadNode(TSharedPtr<FStreamableHandle> InWealthHandle, FClassWealthEntry* InWealthEntry, int32 InAmount, FName InObjectName, FName InFunName, TArray<FTransform> InSpawnTransforms)
+	{
+		WealthHandle = InWealthHandle;
+		WealthEntry = InWealthEntry;
+		Amount = InAmount;
+		ObjectName = InObjectName;
+		FunName = InFunName;
+		SpawnTransforms = InSpawnTransforms;
+	}
+	
+	ClassMultiLoadNode(FClassWealthEntry* InWealthEntry, int32 InAmount, FName InObjectName, FName InFunName, TArray<FTransform> InSpawnTransforms)
+	{
+		WealthEntry = InWealthEntry;
+		Amount = InAmount;
+		ObjectName = InObjectName;
+		FunName = InFunName;
+		SpawnTransforms = InSpawnTransforms;
+	}
+};
 
 void UDDWealth::WealthInit()
 {
@@ -222,6 +260,7 @@ void UDDWealth::WealthTick(float DeltaSeconds)
 	DealObjectKindLoadStack();
 	DealClassKindLoadStack();
 	DealClassSingleLoadStack();
+	DealClassMultiLoadStack();
 }
 
 void UDDWealth::AssignData(TArray<UWealthData*>& InWealthData)
@@ -557,7 +596,6 @@ void UDDWealth::DealClassKindLoadStack()
 	}
 }
 
-
 void UDDWealth::DealObjectKindLoadStack()
 {
 	// 定义加载完成的序列
@@ -778,6 +816,48 @@ void UDDWealth::BuildKindClassWealth(EWealthType WealthType, FName WealthKind, F
 	ClassKindLoadStack.Push(new ClassKindLoadNode(WealthHandle, UnLoadWealthEntry, LoadWealthEntry, ObjectName, FunName, SpawnTransforms));
 }
 
+void UDDWealth::BuildMultiClassWealth(EWealthType WealthType, FName WealthName, int32 Amount, FName ObjectName,
+	FName FunName, TArray<FTransform> SpawnTransforms)
+{
+	// 获取对应资源结构体
+	FClassWealthEntry* WealthEntry = GetClassSingleEntry(WealthName);
+	// 如果资源为空
+	if (!WealthEntry)
+	{
+		DDH::Debug(10) << ObjectName << " Get Null Wealth " << WealthName << DDH::Endl();
+		return;
+	}
+	// 如果资源不可用
+	if (!WealthEntry->WealthPtr.ToSoftObjectPath().IsValid())
+	{
+		DDH::Debug(10) << ObjectName << " Get UnVaild Wealth " << WealthName << DDH::Endl();
+		return;
+	}
+	// 资源类型是否匹配
+	if (WealthEntry->WealthType != WealthType)
+	{
+		DDH::Debug(10) << ObjectName << " Get Error Type " << WealthName << DDH::Endl();
+		return;
+	}
+	// 验证Transform数组的数量是否为1 或者为Amount计数,或者Amount==0
+	if ((WealthEntry->WealthType == EWealthType::Actor && SpawnTransforms.Num() != 1 && SpawnTransforms.Num() != Amount) || Amount == 0)
+	{
+		DDH::Debug(10) << ObjectName << " Send Error Spawn Count : " << WealthName << DDH::Endl();
+		return;
+	}
+	// 如果已经加载资源
+	if (WealthEntry->WealthClass)
+	{
+		ClassMultiLoadStack.Push(new ClassMultiLoadNode(WealthEntry, Amount, ObjectName, FunName, SpawnTransforms));
+	} else
+	{
+		// 异步加载
+		TSharedPtr<FStreamableHandle> WealthHandle = WealthLoader.RequestAsyncLoad(WealthEntry->WealthPtr.ToSoftObjectPath());
+		// 添加新节点
+		ClassMultiLoadStack.Push(new ClassMultiLoadNode(WealthHandle, WealthEntry, Amount, ObjectName, FunName, SpawnTransforms));
+	}
+}
+
 
 void UDDWealth::DealClassSingleLoadStack()
 {
@@ -870,3 +950,82 @@ void UDDWealth::DealObjectSingleLoadStack()
 	}
 }
 
+
+
+void UDDWealth::DealClassMultiLoadStack()
+{
+	// 定义完成的节点
+	TArray<ClassMultiLoadNode*> CompleteStack;
+	for (int i = ClassMultiLoadStack.Num() - 1; i >= 0 ; i--)
+	{
+		// 如果没有加载UClass，说明加载句柄有效,是需要异步加载的
+		if (!ClassMultiLoadStack[i]->WealthEntry->WealthClass)
+		{
+			// 如果加载句柄加载完毕
+			if (ClassMultiLoadStack[i]->WealthHandle->HasLoadCompleted())
+			{
+				UObject* InWealthObject = ClassMultiLoadStack[i]->WealthHandle->GetLoadedAsset();
+				ClassMultiLoadStack[i]->WealthEntry->WealthClass = Cast<UClass>(InWealthObject);
+			}
+		}
+		// 再次判断WealthClass是否存在,如果存在，就进入生产资源阶段
+		if (ClassMultiLoadStack[i]->WealthEntry->WealthClass)
+		{
+			// 区分类型，生成对象
+			if (ClassMultiLoadStack[i]->WealthEntry->WealthType == EWealthType::Object)
+			{
+				UObject* InstObject = NewObject<UObject>(this, ClassMultiLoadStack[i]->WealthEntry->WealthClass);
+				InstObject->AddToRoot();
+				ClassMultiLoadStack[i]->ObjectGroup.Push(InstObject);
+
+				// 如果生产完毕，一帧生产一个
+				if (ClassMultiLoadStack[i]->ObjectGroup.Num() >= ClassMultiLoadStack[i]->Amount)
+				{
+					// 返回对象给 请求者
+					BackObjectMulti(ModuleIndex, ClassMultiLoadStack[i]->ObjectName, ClassMultiLoadStack[i]->FunName, ClassMultiLoadStack[i]->WealthEntry->WealthName, ClassMultiLoadStack[i]->ObjectGroup);
+					// 添加到完成序列
+					CompleteStack.Push(ClassMultiLoadStack[i]);
+				}
+			} else if (ClassMultiLoadStack[i]->WealthEntry->WealthType == EWealthType::Actor)
+			{
+				// 获取生成位置
+				FTransform SpawnTransform = ClassMultiLoadStack[i]->SpawnTransforms.Num() == 1 ? ClassMultiLoadStack[i]->SpawnTransforms[0] : ClassMultiLoadStack[i]->SpawnTransforms[ClassMultiLoadStack[i]->ActorGroup.Num()];
+				// 生成对象
+				AActor* InstActor = GetDDWorld()->SpawnActor<AActor>(ClassMultiLoadStack[i]->WealthEntry->WealthClass, SpawnTransform);
+				//添加到参数数组
+				ClassMultiLoadStack[i]->ActorGroup.Push(InstActor);
+				//判断是否生成了 全部对象
+				if (ClassMultiLoadStack[i]->ActorGroup.Num() == ClassMultiLoadStack[i]->Amount)
+				{
+					// 返回对象给 请求者
+					BackActorMulti(ModuleIndex, ClassMultiLoadStack[i]->ObjectName, ClassMultiLoadStack[i]->FunName, ClassMultiLoadStack[i]->WealthEntry->WealthName, ClassMultiLoadStack[i]->ActorGroup);
+					// 添加到完成序列
+					CompleteStack.Push(ClassMultiLoadStack[i]);
+				}
+			} else if (ClassMultiLoadStack[i]->WealthEntry->WealthType == EWealthType::Widget)
+			{
+				UUserWidget* InstWidget = CreateWidget<UUserWidget>(GetDDWorld(), ClassMultiLoadStack[i]->WealthEntry->WealthClass);
+				//避免回收
+				GCWidgetGroup.Push(InstWidget);
+				//添加到参数数组
+				ClassMultiLoadStack[i]->WidgetGroup.Push(InstWidget);
+				//判断是否生成了 全部对象
+				if (ClassMultiLoadStack[i]->WidgetGroup.Num() == ClassMultiLoadStack[i]->Amount)
+				{
+					//返回对象给 请求者
+					BackWidgetMulti(ModuleIndex, ClassMultiLoadStack[i]->ObjectName, ClassMultiLoadStack[i]->FunName, ClassMultiLoadStack[i]->WealthEntry->WealthName, ClassMultiLoadStack[i]->WidgetGroup);
+					//添加到完成序列
+					CompleteStack.Push(ClassMultiLoadStack[i]);
+				}
+			}
+		}
+	}
+
+
+	for (int i = CompleteStack.Num() - 1; i >= 0 ; i--)
+	{
+		// 移除节点序列
+		ClassMultiLoadStack.Remove(CompleteStack[i]);
+		delete CompleteStack[i];
+	}
+}

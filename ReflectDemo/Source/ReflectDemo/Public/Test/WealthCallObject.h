@@ -27,6 +27,18 @@ public:
 	
 	UFUNCTION()
 	void BuildActorKind(TArray<FName> BackName, TArray<AActor*> BackActor);
+	
+	UFUNCTION()
+	void BuildActorMulti(FName BackName, TArray<AActor*> BackActor);
+
+	UFUNCTION()
+	void BuildSingleObject(FName BackName, UObject* BackObject);
+	UFUNCTION()
+	void BuildKindObject(TArray<FName> BackNames, TArray<UObject*> BackObjects);
+	UFUNCTION()
+	void BuildMultiObject(FName BackName, TArray<UObject*> BackObjects);
+
+	DDCoroTask* BuildObjectTest();
 public:
 	UPROPERTY(EditAnywhere)
 	FTransform ViewTrans;

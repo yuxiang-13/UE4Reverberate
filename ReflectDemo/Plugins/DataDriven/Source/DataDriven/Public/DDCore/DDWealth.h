@@ -17,6 +17,8 @@ struct ObjectKindLoadNode;
 struct ClassSingleLoadNode;
 struct ClassKindLoadNode;
 
+struct ClassMultiLoadNode;
+
 UCLASS()
 class DATADRIVEN_API UDDWealth : public UObject, public IDDMM
 {
@@ -44,6 +46,10 @@ public:
 	
 	// 创建同资源种类名的对象实例，同种类名下的每个资源链接创建一个对象实例
 	void BuildKindClassWealth(EWealthType WealthType, FName WealthKind, FName ObjectName, FName FunName, TArray<FTransform> SpawnTransforms);
+
+	//创建多个同资源名的对象实例
+	void BuildMultiClassWealth(EWealthType WealthType, FName WealthName, int32 Amount, FName ObjectName, FName FunName, TArray<FTransform> SpawnTransforms);
+
 protected:
 	// 获取单个结构体
 	FObjectWealthEntry* GetObjectSingleEntry(FName WealthName);
@@ -62,6 +68,8 @@ protected:
 	// 处理批量加载Class节点的方法
 	void DealClassKindLoadStack();
 
+	// 处理创建多个对象的方法
+	void DealClassMultiLoadStack();
 protected:
 	// 资源组
 	TArray<UWealthData*> WealthData;
@@ -71,30 +79,34 @@ protected:
 	FStreamableManager WealthLoader;
 	// 加载节点队列
 	TArray<ObjectSingleLoadNode*> ObjectSingleLoadStack;
-	// 加载节点队列
 	TArray<ObjectKindLoadNode*> ObjectKindLoadStack;
-
-	
-	// 加载节点队列
 	TArray<ClassSingleLoadNode*> ClassSingleLoadStack;
 	TArray<ClassKindLoadNode*> ClassKindLoadStack;
+
+	TArray<ClassMultiLoadNode*> ClassMultiLoadStack;
+	
 protected:
 	// 加载Object反射 回调函数
 	DDOBJFUNC_TWO(BackObjectWealth, FName, BackName, UObject*, BackWealth);
 	// 加载Object一种类型的数组，反射 回调函数
 	DDOBJFUNC_TWO(BackObjectWealthKind, TArray<FName>, BackNames, TArray<UObject*>, BackWealths);
-	
 	// 加载Class反射 回调函数
 	DDOBJFUNC_TWO(BackClassWealth, FName, BackName, UClass*, BackWealth);
 	// 加载Class一种类型的数组，反射 回调函数
 	DDOBJFUNC_TWO(BackClassWealthKind, TArray<FName>, BackNames, TArray<UClass*>, BackWealths);
 
+	
 	// 生成对象反射回调函数
 	DDOBJFUNC_TWO(BackObjectSingle, FName, Back, UObject*, BackObject);
-	DDOBJFUNC_TWO(BackActorSingle, FName, BackName, AActor*, BackActor);
-	DDOBJFUNC_TWO(BackWidgetSingle, FName, BackName, UUserWidget*, BackWidget);
-
 	DDOBJFUNC_TWO(BackObjectKind, TArray<FName>, BackNames, TArray<UObject*>, BackObjects);
+	DDOBJFUNC_TWO(BackObjectMulti, FName, BackName, TArray<UObject*>, BackObjects);
+
 	DDOBJFUNC_TWO(BackActorKind, TArray<FName>, BackNames, TArray<AActor*>, BackObjects);
+	DDOBJFUNC_TWO(BackActorSingle, FName, BackName, AActor*, BackActor);
+	DDOBJFUNC_TWO(BackActorMulti, FName, BackName, TArray<AActor*>, BackActors);
+	
+	DDOBJFUNC_TWO(BackWidgetSingle, FName, BackName, UUserWidget*, BackWidget);
 	DDOBJFUNC_TWO(BackWidgetKind, TArray<FName>, BackNames, TArray<UUserWidget*>, BackObjects);
+	DDOBJFUNC_TWO(BackWidgetMulti, FName, BackName, TArray<UUserWidget*>, BackObjects);
+
 };

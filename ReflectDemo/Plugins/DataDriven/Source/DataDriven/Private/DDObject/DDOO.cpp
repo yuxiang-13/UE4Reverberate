@@ -315,3 +315,17 @@ void IDDOO::BuildKindClassWealth(EWealthType WealthType, FName WealthKind, FName
 	IModule->BuildKindClassWealth(WealthType, WealthKind, GetObjectName(), FunName, SpawnTransforms);
 }
 
+void IDDOO::BuildMultiClassWealth(EWealthType WealthType, FName WealthName, int32 Amount, FName FunName)
+{
+	IModule->BuildMultiClassWealth(WealthType, WealthName, Amount, GetObjectName(), FunName, TArray<FTransform>{ FTransform::Identity });
+}
+
+void IDDOO::BuildMultiClassWealth(EWealthType WealthType, FName WealthName, int32 Amount, FName FunName, FTransform SpawnTransform)
+{
+	IModule->BuildMultiClassWealth(WealthType, WealthName, Amount, GetObjectName(), FunName, TArray<FTransform>{ SpawnTransform });
+}
+
+void IDDOO::BuildMultiClassWealth(EWealthType WealthType, FName WealthName, int32 Amount, FName FunName, TArray<FTransform> SpawnTransforms)
+{
+	IModule->BuildMultiClassWealth(WealthType, WealthName, Amount, GetObjectName(), FunName, SpawnTransforms);
+}

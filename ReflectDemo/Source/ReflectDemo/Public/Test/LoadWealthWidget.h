@@ -9,6 +9,7 @@
 
 class UImage;
 class UTexture2D;
+class USizeBox;
 
 UCLASS()
 class REFLECTDEMO_API ULoadWealthWidget : public UDDUserWidget
@@ -21,8 +22,26 @@ public:
 	int32 ImageIndex;
 	
 	TArray<UTexture2D*> TextureGroup;
+	
+	UPROPERTY(Meta=(BindWidget))
+	USizeBox* SizeBox_1;
+	
+	UPROPERTY(Meta=(BindWidget))
+	USizeBox* SizeBox_2;
+	
+	UPROPERTY(Meta=(BindWidget))
+	USizeBox* SizeBox_3;
 
 	void ChangeImage();
+	
+	UFUNCTION()
+	void BuildSingleWidget(FName BackName, UUserWidget* BackWidget);
+	UFUNCTION()
+	void BuildKindWidget(TArray<FName> BackNames, TArray<UUserWidget*> BackWidgets);
+	UFUNCTION()
+	void BuildMultiWidget(FName BackName, TArray<UUserWidget*> BackWidgets);
+
+	DDCoroTask* BuildWidgetTest();
 public:
 	virtual void DDInit() override;
 	virtual void DDLoading() override;
